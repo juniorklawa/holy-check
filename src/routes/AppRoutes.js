@@ -1,6 +1,9 @@
 import React from 'react';
-import {createStackNavigator} from '@react-navigation/stack';
-import {createCollapsibleStack} from 'react-navigation-collapsible';
+import {
+  createStackNavigator,
+  TransitionPresets
+} from '@react-navigation/stack';
+import { createCollapsibleStack } from 'react-navigation-collapsible';
 
 import MainPage from '../pages/MainPage';
 import BookPage from '../pages/BookPage';
@@ -9,6 +12,7 @@ const App = createStackNavigator();
 const AppRoutes = () => (
   <App.Navigator
     screenOptions={{
+      ...TransitionPresets.SlideFromRightIOS,
       cardStyle: {backgroundColor: '#FFF'},
     }}>
     {createCollapsibleStack(
@@ -21,14 +25,14 @@ const AppRoutes = () => (
             fontSize: 22,
           },
           headerStyle: {
-            elevation: 0,
             backgroundColor: '#fff',
           },
         }}
         name="MainPage"
         component={MainPage}
-      />,
-    )}
+      />, {
+      elevation: 0
+    })}
     {createCollapsibleStack(
       <App.Screen
         options={{
@@ -38,14 +42,14 @@ const AppRoutes = () => (
             fontSize: 22,
           },
           headerStyle: {
-            elevation: 0,
             backgroundColor: '#fff',
           },
         }}
         name="BookPage"
         component={BookPage}
-      />,
-    )}
+      />, {
+      elevation: 0
+    })}
   </App.Navigator>
 );
 

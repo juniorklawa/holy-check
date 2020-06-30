@@ -23,9 +23,6 @@ const MainPage = () => {
     scrollIndicatorInsetTop /* number */,
   } = useCollapsibleStack();
 
-  React.useLayoutEffect(() => {
-    navigation.setOptions({});
-  }, [navigation]);
 
   return (
     <>
