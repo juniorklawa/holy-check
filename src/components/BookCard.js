@@ -1,11 +1,11 @@
 import React from 'react';
-import {StyleSheet, Text, TouchableOpacity} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import getBookTypeColors from '../utils/getBookTypeColors';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import {useNavigation} from '@react-navigation/native';
 
 const BookCard = ({book, readChapters}) => {
-  console.log(readChapters);
   const {type, title, totalChapters} = book;
   const navigation = useNavigation();
   return (
@@ -17,24 +17,33 @@ const BookCard = ({book, readChapters}) => {
         end={{x: 0, y: 3}}
         colors={getBookTypeColors(type)}
         style={styles.cardContainer}>
-        <Text adjustsFontSizeToFit numberOfLines={1} style={styles.title}>
-          {title}
-        </Text>
-
-        {readChapters > 0 && (
-          <Text
-            adjustsFontSizeToFit
-            numberOfLines={1}
-            style={styles.readChapters}>
-            {readChapters} read
-          </Text>
+        {readChapters === book.totalChapters ? (
+          <View style={{alignItems: 'flex-end', flex: 1, margin: 4}}>
+            <Icon name="check" size={16} color="#fff" />
+          </View>
+        ) : (
+          <View style={{alignItems: 'flex-end', flex: 1}} />
         )}
-        <Text
-          adjustsFontSizeToFit
-          numberOfLines={1}
-          style={styles.totalChapters}>
-          {totalChapters} chapters
-        </Text>
+        <View style={{justifyContent: 'flex-end'}}>
+          <Text adjustsFontSizeToFit numberOfLines={1} style={styles.title}>
+            {title}
+          </Text>
+          {readChapters > 0 ? (
+            <Text
+              adjustsFontSizeToFit
+              numberOfLines={1}
+              style={styles.totalChapters}>
+              {readChapters} / {totalChapters} chapters
+            </Text>
+          ) : (
+            <Text
+              adjustsFontSizeToFit
+              numberOfLines={1}
+              style={styles.totalChapters}>
+              {totalChapters} chapters
+            </Text>
+          )}
+        </View>
       </LinearGradient>
     </TouchableOpacity>
   );
@@ -47,7 +56,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     minHeight: 135,
     minWidth: 102,
-    justifyContent: 'flex-end',
     padding: 8,
   },
   title: {

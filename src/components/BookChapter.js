@@ -4,7 +4,14 @@ import LinearGradient from 'react-native-linear-gradient';
 import getBookTypeColors from '../utils/getBookTypeColors';
 import createOneChapter from '../services/createOneChapter';
 
-const BookChapter = ({chapter, type, parentId, read, setTotalReadChapters}) => {
+const BookChapter = ({
+  chapter,
+  type,
+  parentId,
+  read,
+  setTotalReadChapters,
+  section,
+}) => {
   const [isRead, setIsRead] = useState(read);
 
   async function handleChapter() {
@@ -13,6 +20,7 @@ const BookChapter = ({chapter, type, parentId, read, setTotalReadChapters}) => {
     const chapterPayload = {
       id: parentId + chapter,
       parentId,
+      section,
     };
     setTotalReadChapters(prevState => prevState + (isRead ? -1 : +1));
     await createOneChapter(chapterPayload, isRead);

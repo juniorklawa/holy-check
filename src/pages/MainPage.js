@@ -1,50 +1,116 @@
 import {useNavigation} from '@react-navigation/native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {
+  Alert,
   Animated,
   FlatList,
   SafeAreaView,
   StatusBar,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from 'react-native';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 import {useCollapsibleStack} from 'react-navigation-collapsible';
 import BookCard from '../components/BookCard';
 import {NEW_TESTMENT_DATA, OLD_TESTMENT_DATA} from '../data/BOOKS_DATA';
+import {TestmentEnum} from '../enums/TestmentEnum';
+import deleteAll from '../services/deleteAll';
 import getChapters from '../services/getChapters';
+
+/**
+ * TODO
+ * - Pray List
+ * - I18n
+ */
 
 const MainPage = () => {
   const [chapters, setChapters] = useState([]);
-  const [isLoading, setIsLoading] = useState([]);
   const navigation = useNavigation();
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const [shouldReload, setShouldReload] = useState(false);
+
+  React.useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity
+          onPress={() => resetProgress()}
+          style={{marginRight: 16}}>
+          <Icon name="redo" color={'#000'} size={20} />
+        </TouchableOpacity>
+      ),
+      headerLeft: () => (
+        <TouchableOpacity onPress={() => {}} style={{marginLeft: 16}}>
+          <Icon name="list" color={'#000'} size={20} />
+        </TouchableOpacity>
+      ),
+    });
+  });
+
   useEffect(() => {
+    async function loadData() {
+      const storagedChapters = await getChapters();
+      setChapters(storagedChapters);
+    }
+    loadData();
+
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 200,
+      useNativeDriver: true,
+    }).start();
+
     const unsubscribe = navigation.addListener('focus', () => {
       loadData();
     });
 
-    async function loadData() {
-      setIsLoading(true);
-      const storagedChapters = await getChapters();
-      setChapters(storagedChapters);
-      setIsLoading(false);
-    }
-    loadData();
-
     return unsubscribe;
-  }, [navigation]);
+  }, [navigation, fadeAnim, shouldReload]);
 
-  const {
-    onScroll /* Event handler */,
-    scrollIndicatorInsetTop /* number */,
-  } = useCollapsibleStack();
+  const {onScroll, scrollIndicatorInsetTop} = useCollapsibleStack();
 
   function getReadChapters(id) {
     return chapters.filter(chapter => chapter.parentId === id).length;
   }
 
-  if (isLoading) {
-    return null;
+  function getOldTestmentReadPercentage() {
+    const readChapters = chapters.filter(
+      chapter => chapter.section === TestmentEnum.OLD,
+    ).length;
+
+    const totalOldChapters = 929;
+
+    return `${((readChapters / totalOldChapters) * 100).toFixed(2)}% read`;
+  }
+
+  function getNewTestmentReadPercentage() {
+    const readChapters = chapters.filter(
+      chapter => chapter.section === TestmentEnum.NEW,
+    ).length;
+
+    const totalNewChapters = 260;
+
+    return `${((readChapters / totalNewChapters) * 100).toFixed(2)}% read`;
+  }
+
+  async function resetProgress() {
+    return Alert.alert('Reset all your reading progress!', 'Are you sure?', [
+      {
+        text: 'No',
+        onPress: () => {
+          return;
+        },
+        style: 'cancel',
+      },
+      {
+        text: 'Yes',
+        onPress: async () => {
+          await deleteAll();
+          setShouldReload(true);
+        },
+      },
+    ]);
   }
 
   return (
@@ -58,11 +124,22 @@ const MainPage = () => {
           contentContainerStyle={{paddingTop: 80}}
           scrollIndicatorInsets={{top: scrollIndicatorInsetTop}}
           style={styles.scrollView}>
-          <View style={styles.body}>
+          <Animated.View
+            style={[
+              styles.body,
+              {
+                opacity: fadeAnim,
+              },
+            ]}>
             <FlatList
               showsVerticalScrollIndicator={false}
               ListHeaderComponent={
-                <Text style={styles.sectionTitle}>Old Testament</Text>
+                <View>
+                  <Text style={styles.sectionTitle}>Old Testament</Text>
+                  <Text style={styles.sectionSubtitle}>
+                    {getOldTestmentReadPercentage()}
+                  </Text>
+                </View>
               }
               data={OLD_TESTMENT_DATA}
               renderItem={({item}) => (
@@ -74,7 +151,12 @@ const MainPage = () => {
 
             <FlatList
               ListHeaderComponent={
-                <Text style={styles.sectionTitle}>New Testament</Text>
+                <View>
+                  <Text style={styles.sectionTitle}>New Testament</Text>
+                  <Text style={styles.sectionSubtitle}>
+                    {getNewTestmentReadPercentage()}
+                  </Text>
+                </View>
               }
               data={NEW_TESTMENT_DATA}
               renderItem={({item}) => (
@@ -83,7 +165,7 @@ const MainPage = () => {
               numColumns={3}
               keyExtractor={(item, index) => index.toString()}
             />
-          </View>
+          </Animated.View>
         </Animated.ScrollView>
       </SafeAreaView>
     </>
@@ -98,8 +180,17 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     fontSize: 22,
-    marginVertical: 16,
+    color: '#212121',
+    marginVertical: 2,
+    marginTop: 16,
+    fontFamily: 'Poppins-Bold',
+  },
+  sectionSubtitle: {
+    fontSize: 18,
     marginHorizontal: 4,
+    marginBottom: 12,
+    color: '#666',
+    opacity: 0.4,
     fontFamily: 'Poppins-Bold',
   },
 });

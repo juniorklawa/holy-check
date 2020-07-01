@@ -7,6 +7,7 @@ export default async function createOneChapter(chapter, isRead) {
       read: !isRead,
       note: '',
       parentId: chapter.parentId,
+      section: chapter.section,
     };
     const realm = await getRealm();
     realm.write(() => {

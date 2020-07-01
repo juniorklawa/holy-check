@@ -29,7 +29,6 @@ const BookPage = ({route}) => {
       setTotalReadChapters(storagedChapters.length);
       setLoading(false);
     }
-    console.log(book);
     loadData();
   }, [book]);
 
@@ -49,6 +48,7 @@ const BookPage = ({route}) => {
         id: chapterId,
         chapter: i + 1,
         read: chapters.some(chapter => chapter.id === chapterId),
+        section: book.section,
       };
     });
 
@@ -111,7 +111,9 @@ const BookPage = ({route}) => {
           <View style={styles.body}>
             <View style={{flexDirection: 'row'}}>
               <Text style={styles.progressText}>{`${totalReadChapters}`}</Text>
-              <Text style={styles.totalText}>{`/${book.totalChapters}`}</Text>
+              <Text style={styles.totalText}>{`/${
+                book.totalChapters
+              } read`}</Text>
             </View>
 
             <FlatList
@@ -128,6 +130,7 @@ const BookPage = ({route}) => {
                     type={book.type}
                     parentId={book.id}
                     read={item.read}
+                    section={item.section}
                   />
                 );
               }}
