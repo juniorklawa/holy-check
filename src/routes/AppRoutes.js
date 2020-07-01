@@ -1,9 +1,6 @@
 import React from 'react';
-import {
-  createStackNavigator,
-  TransitionPresets
-} from '@react-navigation/stack';
-import { createCollapsibleStack } from 'react-navigation-collapsible';
+import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
+import {createCollapsibleStack} from 'react-navigation-collapsible';
 
 import MainPage from '../pages/MainPage';
 import BookPage from '../pages/BookPage';
@@ -30,9 +27,11 @@ const AppRoutes = () => (
         }}
         name="MainPage"
         component={MainPage}
-      />, {
-      elevation: 0
-    })}
+      />,
+      {
+        elevation: 0,
+      },
+    )}
     {createCollapsibleStack(
       <App.Screen
         options={{
@@ -47,9 +46,11 @@ const AppRoutes = () => (
         }}
         name="BookPage"
         component={BookPage}
-      />, {
-      elevation: 0
-    })}
+      />,
+      {
+        elevation: 0,
+      },
+    )}
   </App.Navigator>
 );
 

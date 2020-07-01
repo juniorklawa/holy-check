@@ -4,7 +4,8 @@ import LinearGradient from 'react-native-linear-gradient';
 import getBookTypeColors from '../utils/getBookTypeColors';
 import {useNavigation} from '@react-navigation/native';
 
-const BookCard = ({book}) => {
+const BookCard = ({book, readChapters}) => {
+  console.log(readChapters);
   const {type, title, totalChapters} = book;
   const navigation = useNavigation();
   return (
@@ -19,12 +20,15 @@ const BookCard = ({book}) => {
         <Text adjustsFontSizeToFit numberOfLines={1} style={styles.title}>
           {title}
         </Text>
-        <Text
-          adjustsFontSizeToFit
-          numberOfLines={1}
-          style={styles.readChapters}>
-          {totalChapters} read
-        </Text>
+
+        {readChapters > 0 && (
+          <Text
+            adjustsFontSizeToFit
+            numberOfLines={1}
+            style={styles.readChapters}>
+            {readChapters} read
+          </Text>
+        )}
         <Text
           adjustsFontSizeToFit
           numberOfLines={1}
@@ -55,12 +59,12 @@ const styles = StyleSheet.create({
   readChapters: {
     fontFamily: 'Poppins-Light',
     color: '#fefefe',
-    fontSize: 10,
+    fontSize: 12,
   },
   totalChapters: {
-    fontFamily: 'Poppins-Thin',
-
+    fontFamily: 'Poppins-Light',
     color: '#fff',
+    opacity: 0.7,
     fontSize: 10,
   },
 });
