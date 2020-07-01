@@ -21,9 +21,8 @@ import getChapters from '../services/getChapters';
 
 /**
  * TODO
- * - General book information
- * - Pray List
  * - I18n
+ * - useMemo and use Callbacks
  */
 
 const MainPage = () => {
@@ -45,7 +44,7 @@ const MainPage = () => {
       headerLeft: () => (
         <TouchableOpacity
           hitSlop={{top: 20, bottom: 20, left: 50, right: 50}}
-          onPress={() => {}}
+          onPress={() => navigation.navigate('PrayList')}
           style={{marginLeft: 16}}>
           <Icon name="list" color={'#000'} size={20} />
         </TouchableOpacity>
