@@ -21,6 +21,7 @@ import getChapters from '../services/getChapters';
 
 /**
  * TODO
+ * - General book information
  * - Pray List
  * - I18n
  */
@@ -36,12 +37,16 @@ const MainPage = () => {
       headerRight: () => (
         <TouchableOpacity
           onPress={() => resetProgress()}
+          hitSlop={{top: 20, bottom: 20, left: 50, right: 50}}
           style={{marginRight: 16}}>
           <Icon name="redo" color={'#000'} size={20} />
         </TouchableOpacity>
       ),
       headerLeft: () => (
-        <TouchableOpacity onPress={() => {}} style={{marginLeft: 16}}>
+        <TouchableOpacity
+          hitSlop={{top: 20, bottom: 20, left: 50, right: 50}}
+          onPress={() => {}}
+          style={{marginLeft: 16}}>
           <Icon name="list" color={'#000'} size={20} />
         </TouchableOpacity>
       ),

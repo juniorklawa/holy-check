@@ -67,7 +67,7 @@ const BookPage = ({route}) => {
   }
 
   if (isLoading) {
-    return <Text>Loading</Text>;
+    // return <Text>Loading</Text>;
   }
 
   const styles = StyleSheet.create({
@@ -94,6 +94,24 @@ const BookPage = ({route}) => {
       color: '#666',
       opacity: 0.3,
       fontFamily: 'Poppins-Medium',
+    },
+    modalContainer: {
+      flex: 1,
+    },
+    modalView: {
+      backgroundColor: 'white',
+      marginTop: 48,
+      flex: 1,
+      width: '100%',
+      padding: 16,
+      shadowColor: '#000',
+      shadowOpacity: 0.25,
+      shadowRadius: 3.84,
+      elevation: 5,
+    },
+    modalText: {
+      marginBottom: 15,
+      textAlign: 'center',
     },
   });
 

@@ -38,7 +38,7 @@ const AppRoutes = () => (
           headerTitleAlign: 'center',
           headerTitleStyle: {
             fontFamily: 'Poppins-SemiBold',
-            fontSize: 22,
+            fontSize: 20,
           },
           headerStyle: {
             backgroundColor: '#fff',
