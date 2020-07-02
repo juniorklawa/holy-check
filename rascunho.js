@@ -15,11 +15,10 @@ import LinearGradient from 'react-native-linear-gradient';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {useCollapsibleStack} from 'react-navigation-collapsible';
-import UUIDGenerator from 'react-native-uuid-generator';
-import {ScrollView} from 'react-native-gesture-handler';
 
-export default function PrayList() {
+const PrayList = () => {
   const navigation = useNavigation();
+  const fadeAnim = useRef(new Animated.Value(0)).current;
   const [reason, setReason] = useState(null);
   const [description, setDescription] = useState(null);
   const [prayList, setPrayList] = useState([]);
@@ -29,76 +28,79 @@ export default function PrayList() {
     refRBSheet.current.open();
   };
 
-  React.useLayoutEffect(() => {
-    navigation.setOptions({
-      headerRight: () => (
-        <TouchableOpacity
-          onPress={handleOpen}
-          hitSlop={{top: 20, bottom: 20, left: 50, right: 50}}
-          style={{marginRight: 16}}>
-          <Icon name="plus" color={'#000'} size={20} />
-        </TouchableOpacity>
-      ),
-    });
-  });
+  // React.useLayoutEffect(() => {
+  //   navigation.setOptions({
+  //     headerRight: () => (
+  //       <TouchableOpacity
+  //         onPress={handleOpen}
+  //         hitSlop={{top: 20, bottom: 20, left: 50, right: 50}}
+  //         style={{marginRight: 16}}>
+  //         <Icon name="plus" color={'#000'} size={20} />
+  //       </TouchableOpacity>
+  //     ),
+  //   });
+  // });
 
-  useEffect(() => {}, [navigation]);
+  // useEffect(() => {
+  //   async function loadData() {}
+  //   loadData();
+
+  //   const unsubscribe = navigation.addListener('focus', () => {
+  //     loadData();
+  //   });
+
+  //   return unsubscribe;
+  // }, [navigation]);
 
   function isButtonValidated() {
-    return reason;
+    return reason && description;
   }
 
-  async function handlePrayNote() {
+  function handlePrayNote() {
     console.log('handlePrayNote');
     const newPray = {
-      id: await UUIDGenerator.getRandomUUID(),
-      title: reason,
-      description: description,
+      id: new Date(),
+      title: 'oi',
+      description: 'eu sou o goku',
     };
     console.log(newPray);
     setPrayList(previousState => [...previousState, newPray]);
-    setReason(null);
-    setDescription(null);
-    refRBSheet.current.close();
+    // refRBSheet.current.close();
   }
+
+  const {onScroll, scrollIndicatorInsetTop} = useCollapsibleStack();
 
   return (
     <>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView style={{flex: 1}}>
-        <View style={styles.body}>
-          {prayList.length ? (
-            <FlatList
-              showsVerticalScrollIndicator={false}
-              data={prayList}
-              renderItem={({item}) => (
-                <View
-                  style={{
-                    width: '100%',
-                    minHeight: 70,
-                    backgroundColor: '#F5F5F5',
-                    marginVertical: 4,
-                    borderRadius: 5,
-                    padding: 16,
-                  }}>
-                  <Text style={styles.cardTitle}>{item.title}</Text>
-                  <Text style={styles.cardSubtitle}>{item.description}</Text>
-                </View>
-              )}
-              keyExtractor={(item, index) => index.toString()}
-            />
-          ) : (
-            <View
-              style={{
-                justifyContent: 'center',
-                alignItems: 'center',
-                height: '100%',
-              }}>
-              <Text style={{fontFamily: 'Poppins-Light'}}>
-                Press + to add a new pray
-              </Text>
-            </View>
-          )}
+      <SafeAreaView>
+        {/* <Animated.ScrollView
+          contentInsetAdjustmentBehavior="automatic"
+          showsVerticalScrollIndicator={false}
+          onScroll={onScroll}
+          contentContainerStyle={{paddingTop: 80}}
+          scrollIndicatorInsets={{top: scrollIndicatorInsetTop}}
+          style={styles.scrollView}>
+          <Animated.View
+            style={[
+              styles.body,
+              {
+                opacity: fadeAnim,
+              },
+            ]}>
+            {prayList.map((pray, index) => (
+
+            ))}
+          </Animated.View>
+        </Animated.ScrollView> */}
+
+        <View style={{flex: 1, backgroundColor: 'red'}}>
+          <Text>oi</Text>
+          <Text>oi</Text>
+          <Text>oi</Text>
+          <Text>oi</Text>
+          <Text>oi</Text>
+          <Text>oi</Text>
+          <Text>oi</Text>
         </View>
 
         <RBSheet
@@ -115,7 +117,7 @@ export default function PrayList() {
               backgroundColor: '#000',
             },
           }}>
-          <ScrollView style={{padding: 16, flex: 1}}>
+          <View style={{padding: 16}}>
             <Text
               style={{
                 fontFamily: 'Poppins-SemiBold',
@@ -137,14 +139,11 @@ export default function PrayList() {
               style={styles.prayDescription}
               onChangeText={text => setDescription(text)}
               value={description}
-              onSubmitEditing={async () => {
-                await handlePrayNote();
-              }}
             />
 
             <TouchableOpacity
-              disabled={!isButtonValidated()}
-              onPress={async () => await handlePrayNote()}>
+              // disabled={!isButtonValidated()}
+              onPress={() => handlePrayNote()}>
               <LinearGradient
                 start={{x: 1, y: 0}}
                 end={{x: 0, y: 3}}
@@ -156,17 +155,16 @@ export default function PrayList() {
                 <Text style={styles.buttonText}>Save</Text>
               </LinearGradient>
             </TouchableOpacity>
-          </ScrollView>
+          </View>
         </RBSheet>
       </SafeAreaView>
     </>
   );
-}
+};
 
 const styles = StyleSheet.create({
   body: {
-    margin: 12,
-    flex: 1,
+    marginHorizontal: 12,
   },
   saveButton: {
     justifyContent: 'center',
@@ -196,6 +194,7 @@ const styles = StyleSheet.create({
     borderColor: '#BDBDBD',
 
     color: '#424242',
+    backgroundColor: '#F5F5F5',
     borderWidth: 1,
     borderRadius: 5,
     marginBottom: 8,
@@ -206,6 +205,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Regular',
     color: '#616161',
     borderColor: '#BDBDBD',
+    backgroundColor: '#F5F5F5',
     borderWidth: 1,
     borderRadius: 5,
     marginBottom: 16,
@@ -214,3 +214,21 @@ const styles = StyleSheet.create({
     textAlignVertical: 'top',
   },
 });
+
+export default PrayList;
+
+{
+  /* <View
+key={index}
+style={{
+  width: '100%',
+  minHeight: 70,
+  backgroundColor: '#F5F5F5',
+  marginVertical: 4,
+  borderRadius: 5,
+  padding: 16,
+}}>
+<Text style={styles.cardTitle}>Title</Text>
+<Text style={styles.cardSubtitle}>Description</Text>
+</View> */
+}

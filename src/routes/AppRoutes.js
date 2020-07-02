@@ -30,7 +30,7 @@ const AppRoutes = () => (
         component={MainPage}
       />,
       {
-        elevation: 0,
+        elevation: 3,
       },
     )}
     {createCollapsibleStack(
@@ -49,29 +49,24 @@ const AppRoutes = () => (
         component={BookPage}
       />,
       {
-        elevation: 0,
+        elevation: 3,
       },
     )}
-    {createCollapsibleStack(
-      <App.Screen
-        options={{
-          title: 'Pray list',
-          headerTitleAlign: 'center',
-          headerTitleStyle: {
-            fontFamily: 'Poppins-SemiBold',
-            fontSize: 20,
-          },
-          headerStyle: {
-            backgroundColor: '#fff',
-          },
-        }}
-        name="PrayList"
-        component={PrayList}
-      />,
-      {
-        elevation: 0,
-      },
-    )}
+    <App.Screen
+      options={{
+        title: 'Pray list',
+        headerTitleAlign: 'center',
+        headerTitleStyle: {
+          fontFamily: 'Poppins-SemiBold',
+          fontSize: 20,
+        },
+        headerStyle: {
+          backgroundColor: '#fff',
+        },
+      }}
+      name="PrayList"
+      component={PrayList}
+    />
   </App.Navigator>
 );
 

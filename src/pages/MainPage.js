@@ -23,6 +23,11 @@ import getChapters from '../services/getChapters';
  * TODO
  * - I18n
  * - useMemo and use Callbacks
+ * PrayList
+ * - PrayNoteCard
+ * - Swipe to Delete
+ * - Save/Delete pray in Realm
+ * - Collapsive in PrayList
  */
 
 const MainPage = () => {
