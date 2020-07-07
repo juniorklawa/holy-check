@@ -4,7 +4,8 @@ export default class PraySchema {
     primaryKey: 'id',
     properties: {
       id: {type: 'string'},
-      answeredDate: 'string',
+      createdAt: 'string',
+      updatedAt: 'string',
       title: 'string',
       description: 'string',
     },

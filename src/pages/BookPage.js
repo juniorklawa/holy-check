@@ -13,6 +13,7 @@ import {useCollapsibleStack} from 'react-navigation-collapsible';
 import BookChapter from '../components/BookChapter';
 import getChapters from '../services/getChapters';
 import getBookTypeColors from '../utils/getBookTypeColors';
+import ProgressBook from '../components/ProgressBook';
 
 const BookPage = ({route}) => {
   const navigation = useNavigation();
@@ -37,8 +38,15 @@ const BookPage = ({route}) => {
   React.useLayoutEffect(() => {
     navigation.setOptions({
       title: book.title,
+      headerRight: () => (
+        <ProgressBook
+          bookType={book.type}
+          readChapters={totalReadChapters}
+          totalBookChapters={book.totalChapters}
+        />
+      ),
     });
-  }, [navigation, book.title]);
+  });
 
   function createChaptersRow() {
     const columns = 3;
@@ -75,6 +83,7 @@ const BookPage = ({route}) => {
 
     body: {
       marginHorizontal: 12,
+      marginTop: 16,
     },
     sectionTitle: {
       fontSize: 22,
@@ -109,13 +118,6 @@ const BookPage = ({route}) => {
           scrollIndicatorInsets={{top: scrollIndicatorInsetTop}}
           style={styles.scrollView}>
           <View style={styles.body}>
-            <View style={{flexDirection: 'row'}}>
-              <Text style={styles.progressText}>{`${totalReadChapters}`}</Text>
-              <Text style={styles.totalText}>{`/${
-                book.totalChapters
-              } read`}</Text>
-            </View>
-
             <FlatList
               data={createChaptersRow()}
               renderItem={({item}) => {

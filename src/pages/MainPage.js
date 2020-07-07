@@ -16,18 +16,14 @@ import {useCollapsibleStack} from 'react-navigation-collapsible';
 import BookCard from '../components/BookCard';
 import {NEW_TESTMENT_DATA, OLD_TESTMENT_DATA} from '../data/BOOKS_DATA';
 import {TestmentEnum} from '../enums/TestmentEnum';
-import deleteAll from '../services/deleteAll';
+import deleteAllReadChapters from '../services/deleteAllReadChapters';
 import getChapters from '../services/getChapters';
 
 /**
  * TODO
  * - I18n
  * - useMemo and use Callbacks
- * PrayList
- * - PrayNoteCard
- * - Swipe to Delete
- * - Save/Delete pray in Realm
- * - Collapsive in PrayList
+ * - useContext
  */
 
 const MainPage = () => {
@@ -115,7 +111,7 @@ const MainPage = () => {
       {
         text: 'Yes',
         onPress: async () => {
-          await deleteAll();
+          await deleteAllReadChapters();
           setShouldReload(true);
         },
       },
@@ -143,7 +139,7 @@ const MainPage = () => {
             <FlatList
               showsVerticalScrollIndicator={false}
               ListHeaderComponent={
-                <View>
+                <View style={{marginLeft: 4}}>
                   <Text style={styles.sectionTitle}>Old Testament</Text>
                   <Text style={styles.sectionSubtitle}>
                     {getOldTestmentReadPercentage()}
@@ -190,13 +186,11 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 22,
     color: '#212121',
-    marginVertical: 2,
     marginTop: 16,
     fontFamily: 'Poppins-Bold',
   },
   sectionSubtitle: {
     fontSize: 18,
-    marginHorizontal: 4,
     marginBottom: 12,
     color: '#666',
     opacity: 0.4,

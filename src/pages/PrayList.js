@@ -1,8 +1,8 @@
 import {useNavigation} from '@react-navigation/native';
 import React, {useEffect, useRef, useState} from 'react';
 import {
+  Alert,
   Animated,
-  FlatList,
   SafeAreaView,
   StatusBar,
   StyleSheet,
@@ -11,12 +11,16 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import {ScrollView} from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
 import RBSheet from 'react-native-raw-bottom-sheet';
+import UUIDGenerator from 'react-native-uuid-generator';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {useCollapsibleStack} from 'react-navigation-collapsible';
-import UUIDGenerator from 'react-native-uuid-generator';
-import {ScrollView} from 'react-native-gesture-handler';
+import createOnePray from '../services/createOnePray';
+import deleteOnePray from '../services/deleteOnePray';
+import getPrays from '../services/getPrays';
+import PrayCard from '../components/PrayCard';
 
 export default function PrayList() {
   const navigation = useNavigation();
@@ -28,6 +32,7 @@ export default function PrayList() {
   const handleOpen = () => {
     refRBSheet.current.open();
   };
+  const {onScroll, scrollIndicatorInsetTop} = useCollapsibleStack();
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -35,71 +40,98 @@ export default function PrayList() {
         <TouchableOpacity
           onPress={handleOpen}
           hitSlop={{top: 20, bottom: 20, left: 50, right: 50}}
-          style={{marginRight: 16}}>
+          style={{marginRight: 18}}>
           <Icon name="plus" color={'#000'} size={20} />
         </TouchableOpacity>
       ),
     });
   });
 
-  useEffect(() => {}, [navigation]);
+  useEffect(() => {
+    async function loadData() {
+      const prays = await getPrays();
+      setPrayList(prays);
+    }
+    loadData();
+  }, [navigation]);
 
   function isButtonValidated() {
     return reason;
   }
 
   async function handlePrayNote() {
-    console.log('handlePrayNote');
+    const currentDate = new Date().toISOString();
     const newPray = {
       id: await UUIDGenerator.getRandomUUID(),
       title: reason,
       description: description,
+      createdAt: currentDate,
+      updatedAt: currentDate,
     };
-    console.log(newPray);
     setPrayList(previousState => [...previousState, newPray]);
+    await createOnePray(newPray);
     setReason(null);
     setDescription(null);
     refRBSheet.current.close();
+  }
+
+  async function deletePray(selectedPray) {
+    const updatedList = prayList.filter(pray => pray.id !== selectedPray.id);
+    await deleteOnePray(selectedPray);
+    setPrayList(updatedList);
+  }
+
+  async function showDeleteAlert(selectedPray) {
+    return Alert.alert('Reset all your reading progress!', 'Are you sure?', [
+      {
+        text: 'No',
+        onPress: () => {
+          return;
+        },
+        style: 'cancel',
+      },
+      {
+        text: 'Yes',
+        onPress: async () => {
+          await deletePray(selectedPray);
+        },
+      },
+    ]);
   }
 
   return (
     <>
       <StatusBar barStyle="dark-content" />
       <SafeAreaView style={{flex: 1}}>
-        <View style={styles.body}>
-          {prayList.length ? (
-            <FlatList
-              showsVerticalScrollIndicator={false}
-              data={prayList}
-              renderItem={({item}) => (
-                <View
-                  style={{
-                    width: '100%',
-                    minHeight: 70,
-                    backgroundColor: '#F5F5F5',
-                    marginVertical: 4,
-                    borderRadius: 5,
-                    padding: 16,
-                  }}>
-                  <Text style={styles.cardTitle}>{item.title}</Text>
-                  <Text style={styles.cardSubtitle}>{item.description}</Text>
-                </View>
-              )}
-              keyExtractor={(item, index) => index.toString()}
-            />
-          ) : (
-            <View
-              style={{
-                justifyContent: 'center',
-                alignItems: 'center',
-                height: '100%',
-              }}>
-              <Text style={{fontFamily: 'Poppins-Light'}}>
-                Press + to add a new pray
-              </Text>
-            </View>
-          )}
-        </View>
+        {prayList.length ? (
+          <Animated.FlatList
+            style={styles.body}
+            contentContainerStyle={{paddingTop: 80}}
+            scrollIndicatorInsets={{top: scrollIndicatorInsetTop}}
+            showsVerticalScrollIndicator={false}
+            onScroll={onScroll}
+            data={prayList}
+            renderItem={({item}) => (
+              <PrayCard
+                key={item.id}
+                pray={item}
+                prayList={prayList}
+                setPrayList={setPrayList}
+              />
+            )}
+          />
+        ) : (
+          <View
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: '100%',
+            }}>
+            <Text style={{fontFamily: 'Poppins-Light'}}>
+              Press + to add a new pray
+            </Text>
+          </View>
+        )}
 
         <RBSheet
           ref={refRBSheet}

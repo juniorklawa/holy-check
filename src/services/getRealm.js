@@ -4,6 +4,6 @@ import PraySchema from '../schemas/PraySchema';
 
 export default function getRealm() {
   return Realm.open({
-    schema: [ChapterSchema, PraySchema],
+    schema: [ChapterSchema.schema, PraySchema.schema],
   });
 }

@@ -1,8 +1,8 @@
 import getRealm from '../services/getRealm';
 
-export default async function deleteAll() {
+export default async function deleteOnePray(selectedPray) {
   const realm = await getRealm();
   realm.write(() => {
-    realm.deleteAll();
+    realm.delete(selectedPray);
   });
 }
