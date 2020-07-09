@@ -22,15 +22,13 @@ import deleteAllReadChapters from '../services/deleteAllReadChapters';
 /**
  * TODO
  * - I18n
- * - useContext
  * - Refactoring
  */
 
 const MainPage = () => {
   const navigation = useNavigation();
   const fadeAnim = useRef(new Animated.Value(0)).current;
-  const [shouldReload, setShouldReload] = useState(false);
-  const {chapters} = useProgress();
+  const {chapters, deleteReadChapters} = useProgress();
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -56,16 +54,10 @@ const MainPage = () => {
   useEffect(() => {
     Animated.timing(fadeAnim, {
       toValue: 1,
-      duration: 200,
+      duration: 300,
       useNativeDriver: true,
     }).start();
-
-    const unsubscribe = navigation.addListener('focus', () => {
-      // loadData();
-    });
-
-    return unsubscribe;
-  }, [navigation, fadeAnim, shouldReload]);
+  }, [navigation, fadeAnim]);
 
   const {onScroll, scrollIndicatorInsetTop} = useCollapsibleStack();
 
@@ -105,18 +97,13 @@ const MainPage = () => {
       },
       {
         text: 'Yes',
-        onPress: async () => {
-          await deleteAllReadChapters();
-          setShouldReload(true);
-        },
+        onPress: async () => deleteReadChapters(),
       },
     ]);
   }
 
   return (
     <>
-      {/* {console.log('oi', chapters)} */}
-      <StatusBar barStyle="dark-content" />
       <SafeAreaView>
         <Animated.ScrollView
           contentInsetAdjustmentBehavior="automatic"

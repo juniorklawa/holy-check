@@ -6,6 +6,7 @@ import React, {
   useEffect,
 } from 'react';
 import getChapters from '../services/getChapters';
+import deleteAllReadChapters from '../services/deleteAllReadChapters';
 
 const ProgressContext = createContext({});
 
@@ -25,7 +26,10 @@ export const ProgressProvider = ({children}) => {
 
   const deletePrays = useCallback(async () => {}, []);
 
-  const deleteReadChapters = useCallback(async () => {}, []);
+  const deleteReadChapters = useCallback(async () => {
+    await deleteAllReadChapters();
+    setChapters([]);
+  }, []);
 
   const updateChapters = updatedChapters => {
     console.log(updatedChapters);

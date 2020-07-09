@@ -11,27 +11,22 @@ import {
 } from 'react-native';
 import {useCollapsibleStack} from 'react-navigation-collapsible';
 import BookChapter from '../components/BookChapter';
-import getChapters from '../services/getChapters';
 import getBookTypeColors from '../utils/getBookTypeColors';
 import ProgressBook from '../components/ProgressBook';
+import {useProgress} from '../hooks/progressProvider';
 
 const BookPage = ({route}) => {
   const navigation = useNavigation();
   const {book} = route.params;
-  const [chapters, setChapters] = useState([]);
+  const {chapters} = useProgress();
   const [totalReadChapters, setTotalReadChapters] = useState(0);
-  const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
-    async function loadData() {
-      setLoading(true);
-      const storagedChapters = await getChapters(book.id);
-      setChapters(storagedChapters);
-      setTotalReadChapters(storagedChapters.length);
-      setLoading(false);
-    }
-    loadData();
-  }, [book]);
+    const filteredChapters = chapters.filter(
+      c => c.parentId === book.id && c.read,
+    );
+    setTotalReadChapters(filteredChapters.length);
+  }, [book, chapters]);
 
   const {onScroll, scrollIndicatorInsetTop} = useCollapsibleStack();
 
@@ -55,7 +50,9 @@ const BookPage = ({route}) => {
       return {
         id: chapterId,
         chapter: i + 1,
-        read: chapters.some(chapter => chapter.id === chapterId),
+        read: chapters.some(
+          chapter => chapter.id === chapterId && chapter.read,
+        ),
         section: book.section,
       };
     });
@@ -72,10 +69,6 @@ const BookPage = ({route}) => {
       lastRowElements += 1;
     }
     return items;
-  }
-
-  if (isLoading) {
-    return <Text>Loading</Text>;
   }
 
   const styles = StyleSheet.create({
