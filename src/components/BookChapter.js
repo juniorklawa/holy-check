@@ -3,27 +3,39 @@ import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import getBookTypeColors from '../utils/getBookTypeColors';
 import createOneChapter from '../services/createOneChapter';
+import {useProgress} from '../hooks/progressProvider';
 
-const BookChapter = ({
+export default function BookChapter({
   chapter,
   type,
   parentId,
   read,
   setTotalReadChapters,
   section,
-}) => {
+}) {
   const [isRead, setIsRead] = useState(read);
+  const {chapters, updateChapters} = useProgress();
 
   async function handleChapter() {
     setIsRead(prevState => !prevState);
-    //spread
-    const chapterPayload = {
+    const newChapter = {
       id: parentId + chapter,
       parentId,
       section,
+      read: !isRead,
     };
     setTotalReadChapters(prevState => prevState + (isRead ? -1 : +1));
-    await createOneChapter(chapterPayload, isRead);
+    const chapterExists = chapters.find(c => c.id === newChapter.id);
+
+    if (chapterExists) {
+      const updatedChapters = chapters.map(c => {
+        return c.id === newChapter.id ? newChapter : c;
+      });
+      updateChapters([...updatedChapters]);
+    } else {
+      updateChapters([...chapters, newChapter]);
+    }
+    await createOneChapter(newChapter);
   }
 
   const styles = StyleSheet.create({
@@ -81,6 +93,4 @@ const BookChapter = ({
       </View>
     </TouchableOpacity>
   );
-};
-
-export default BookChapter;
+}

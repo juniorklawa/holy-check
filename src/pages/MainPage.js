@@ -1,5 +1,5 @@
 import {useNavigation} from '@react-navigation/native';
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 import {
   Alert,
   Animated,
@@ -16,21 +16,21 @@ import {useCollapsibleStack} from 'react-navigation-collapsible';
 import BookCard from '../components/BookCard';
 import {NEW_TESTMENT_DATA, OLD_TESTMENT_DATA} from '../data/BOOKS_DATA';
 import {TestmentEnum} from '../enums/TestmentEnum';
+import {useProgress} from '../hooks/progressProvider';
 import deleteAllReadChapters from '../services/deleteAllReadChapters';
-import getChapters from '../services/getChapters';
 
 /**
  * TODO
  * - I18n
- * - useMemo and use Callbacks
  * - useContext
+ * - Refactoring
  */
 
 const MainPage = () => {
-  const [chapters, setChapters] = useState([]);
   const navigation = useNavigation();
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const [shouldReload, setShouldReload] = useState(false);
+  const {chapters} = useProgress();
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -54,12 +54,6 @@ const MainPage = () => {
   });
 
   useEffect(() => {
-    async function loadData() {
-      const storagedChapters = await getChapters();
-      setChapters(storagedChapters);
-    }
-    loadData();
-
     Animated.timing(fadeAnim, {
       toValue: 1,
       duration: 200,
@@ -67,7 +61,7 @@ const MainPage = () => {
     }).start();
 
     const unsubscribe = navigation.addListener('focus', () => {
-      loadData();
+      // loadData();
     });
 
     return unsubscribe;
@@ -76,10 +70,11 @@ const MainPage = () => {
   const {onScroll, scrollIndicatorInsetTop} = useCollapsibleStack();
 
   function getReadChapters(id) {
-    return chapters.filter(chapter => chapter.parentId === id).length;
+    return chapters.filter(chapter => chapter.parentId === id && chapter.read)
+      .length;
   }
 
-  function getOldTestmentReadPercentage() {
+  const getOldTestmentReadPercentage = useMemo(() => {
     const readChapters = chapters.filter(
       chapter => chapter.section === TestmentEnum.OLD,
     ).length;
@@ -87,9 +82,9 @@ const MainPage = () => {
     const totalOldChapters = 929;
 
     return `${((readChapters / totalOldChapters) * 100).toFixed(2)}% read`;
-  }
+  }, [chapters]);
 
-  function getNewTestmentReadPercentage() {
+  const getNewTestmentReadPercentage = useMemo(() => {
     const readChapters = chapters.filter(
       chapter => chapter.section === TestmentEnum.NEW,
     ).length;
@@ -97,7 +92,7 @@ const MainPage = () => {
     const totalNewChapters = 260;
 
     return `${((readChapters / totalNewChapters) * 100).toFixed(2)}% read`;
-  }
+  }, [chapters]);
 
   async function resetProgress() {
     return Alert.alert('Reset all your reading progress!', 'Are you sure?', [
@@ -120,6 +115,7 @@ const MainPage = () => {
 
   return (
     <>
+      {/* {console.log('oi', chapters)} */}
       <StatusBar barStyle="dark-content" />
       <SafeAreaView>
         <Animated.ScrollView
@@ -142,7 +138,7 @@ const MainPage = () => {
                 <View style={{marginLeft: 4}}>
                   <Text style={styles.sectionTitle}>Old Testament</Text>
                   <Text style={styles.sectionSubtitle}>
-                    {getOldTestmentReadPercentage()}
+                    {getOldTestmentReadPercentage}
                   </Text>
                 </View>
               }
@@ -159,7 +155,7 @@ const MainPage = () => {
                 <View>
                   <Text style={styles.sectionTitle}>New Testament</Text>
                   <Text style={styles.sectionSubtitle}>
-                    {getNewTestmentReadPercentage()}
+                    {getNewTestmentReadPercentage}
                   </Text>
                 </View>
               }

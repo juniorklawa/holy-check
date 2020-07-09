@@ -1,10 +1,10 @@
 import getRealm from '../services/getRealm';
 
-export default async function createOneChapter(chapter, isRead) {
+export default async function createOneChapter(chapter) {
   try {
     const data = {
       id: chapter.id,
-      read: !isRead,
+      read: chapter.read,
       note: '',
       parentId: chapter.parentId,
       section: chapter.section,

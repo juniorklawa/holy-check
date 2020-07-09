@@ -1,7 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
 import React, {useEffect, useRef, useState} from 'react';
 import {
-  Alert,
   Animated,
   SafeAreaView,
   StatusBar,
@@ -17,10 +16,9 @@ import RBSheet from 'react-native-raw-bottom-sheet';
 import UUIDGenerator from 'react-native-uuid-generator';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {useCollapsibleStack} from 'react-navigation-collapsible';
-import createOnePray from '../services/createOnePray';
-import deleteOnePray from '../services/deleteOnePray';
-import getPrays from '../services/getPrays';
 import PrayCard from '../components/PrayCard';
+import createOnePray from '../services/createOnePray';
+import getPrays from '../services/getPrays';
 
 export default function PrayList() {
   const navigation = useNavigation();
@@ -73,30 +71,6 @@ export default function PrayList() {
     setReason(null);
     setDescription(null);
     refRBSheet.current.close();
-  }
-
-  async function deletePray(selectedPray) {
-    const updatedList = prayList.filter(pray => pray.id !== selectedPray.id);
-    await deleteOnePray(selectedPray);
-    setPrayList(updatedList);
-  }
-
-  async function showDeleteAlert(selectedPray) {
-    return Alert.alert('Reset all your reading progress!', 'Are you sure?', [
-      {
-        text: 'No',
-        onPress: () => {
-          return;
-        },
-        style: 'cancel',
-      },
-      {
-        text: 'Yes',
-        onPress: async () => {
-          await deletePray(selectedPray);
-        },
-      },
-    ]);
   }
 
   return (

@@ -12,7 +12,7 @@ const PrayCard = ({pray, prayList, setPrayList}) => {
   }
 
   async function showDeleteAlert(selectedPray) {
-    return Alert.alert('Reset all your reading progress!', 'Are you sure?', [
+    return Alert.alert('Reset all your pray notes!', 'Are you sure?', [
       {
         text: 'No',
         onPress: () => {
