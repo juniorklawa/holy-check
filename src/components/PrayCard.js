@@ -3,10 +3,9 @@ import {Alert, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import deleteOnePray from '../services/deleteOnePray';
 
-const PrayCard = ({pray, prayList, setPrayList}) => {
+const PrayCard = ({pray, prayList, setPrayList, handleOpen, setEditing}) => {
   async function deletePray(selectedPray) {
-    // eslint-disable-next-line no-shadow
-    const updatedList = prayList.filter(pray => pray.id !== selectedPray.id);
+    const updatedList = prayList.filter(p => p.id !== selectedPray.id);
     await deleteOnePray(selectedPray);
     setPrayList(updatedList);
   }
@@ -30,7 +29,11 @@ const PrayCard = ({pray, prayList, setPrayList}) => {
   }
 
   return (
-    <View
+    <TouchableOpacity
+      onPress={() => {
+        setEditing(true);
+        handleOpen(pray);
+      }}
       style={{
         width: '100%',
         minHeight: 70,
@@ -49,7 +52,7 @@ const PrayCard = ({pray, prayList, setPrayList}) => {
         hitSlop={{top: 20, bottom: 20, left: 50, right: 50}}>
         <IonIcon name="md-close-circle" color={'#000'} size={20} />
       </TouchableOpacity>
-    </View>
+    </TouchableOpacity>
   );
 };
 

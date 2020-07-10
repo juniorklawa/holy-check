@@ -24,24 +24,24 @@ export const ProgressProvider = ({children}) => {
     loadData();
   }, []);
 
-  const deletePrays = useCallback(async () => {}, []);
+  /**
+   * @TODO delete all prays
+   */
 
   const deleteReadChapters = useCallback(async () => {
     await deleteAllReadChapters();
     setChapters([]);
   }, []);
 
-  const updateChapters = updatedChapters => {
-    console.log(updatedChapters);
+  const updateChapters = useCallback(updatedChapters => {
     setChapters([...updatedChapters]);
-  };
+  }, []);
 
   return (
     <ProgressContext.Provider
       value={{
         chapters,
         loading,
-        deletePrays,
         deleteReadChapters,
         updateChapters,
       }}>

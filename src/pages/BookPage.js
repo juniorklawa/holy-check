@@ -1,19 +1,11 @@
 import {useNavigation} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
-import {
-  Animated,
-  FlatList,
-  SafeAreaView,
-  StatusBar,
-  StyleSheet,
-  Text,
-  View,
-} from 'react-native';
+import {Animated, FlatList, SafeAreaView, StyleSheet, View} from 'react-native';
 import {useCollapsibleStack} from 'react-navigation-collapsible';
 import BookChapter from '../components/BookChapter';
-import getBookTypeColors from '../utils/getBookTypeColors';
 import ProgressBook from '../components/ProgressBook';
 import {useProgress} from '../hooks/progressProvider';
+import getBookTypeColors from '../utils/getBookTypeColors';
 
 const BookPage = ({route}) => {
   const navigation = useNavigation();
@@ -101,7 +93,6 @@ const BookPage = ({route}) => {
 
   return (
     <>
-      <StatusBar barStyle="dark-content" />
       <SafeAreaView>
         <Animated.ScrollView
           contentInsetAdjustmentBehavior="automatic"

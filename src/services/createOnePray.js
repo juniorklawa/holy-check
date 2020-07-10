@@ -1,6 +1,7 @@
 import getRealm from '../services/getRealm';
 
 export default async function createOnePray(pray) {
+  console.log(pray);
   try {
     const realm = await getRealm();
     realm.write(() => {

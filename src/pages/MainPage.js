@@ -1,11 +1,10 @@
 import {useNavigation} from '@react-navigation/native';
-import React, {useEffect, useMemo, useRef, useState} from 'react';
+import React, {useEffect, useMemo, useRef} from 'react';
 import {
   Alert,
   Animated,
   FlatList,
   SafeAreaView,
-  StatusBar,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -17,7 +16,6 @@ import BookCard from '../components/BookCard';
 import {NEW_TESTMENT_DATA, OLD_TESTMENT_DATA} from '../data/BOOKS_DATA';
 import {TestmentEnum} from '../enums/TestmentEnum';
 import {useProgress} from '../hooks/progressProvider';
-import deleteAllReadChapters from '../services/deleteAllReadChapters';
 
 /**
  * TODO

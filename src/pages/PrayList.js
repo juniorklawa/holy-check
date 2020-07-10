@@ -3,7 +3,6 @@ import React, {useEffect, useRef, useState} from 'react';
 import {
   Animated,
   SafeAreaView,
-  StatusBar,
   StyleSheet,
   Text,
   TextInput,
@@ -22,21 +21,20 @@ import getPrays from '../services/getPrays';
 
 export default function PrayList() {
   const navigation = useNavigation();
-  const [reason, setReason] = useState(null);
-  const [description, setDescription] = useState(null);
+  const [reason, setReason] = useState();
+  const [description, setDescription] = useState();
   const [prayList, setPrayList] = useState([]);
+  const [isEditing, setEditing] = useState(false);
+  const [prayToEdit, setEditPray] = useState(null);
   const refRBSheet = useRef();
 
-  const handleOpen = () => {
-    refRBSheet.current.open();
-  };
   const {onScroll, scrollIndicatorInsetTop} = useCollapsibleStack();
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
         <TouchableOpacity
-          onPress={handleOpen}
+          onPress={() => handleOpen()}
           hitSlop={{top: 20, bottom: 20, left: 50, right: 50}}
           style={{marginRight: 18}}>
           <Icon name="plus" color={'#000'} size={20} />
@@ -58,24 +56,58 @@ export default function PrayList() {
   }
 
   async function handlePrayNote() {
-    const currentDate = new Date().toISOString();
-    const newPray = {
-      id: await UUIDGenerator.getRandomUUID(),
-      title: reason,
-      description: description,
-      createdAt: currentDate,
-      updatedAt: currentDate,
-    };
-    setPrayList(previousState => [...previousState, newPray]);
-    await createOnePray(newPray);
+    if (!isEditing) {
+      const currentDate = new Date().toISOString();
+
+      const newPray = {
+        id: await UUIDGenerator.getRandomUUID(),
+        title: reason,
+        description: description,
+        createdAt: currentDate,
+        updatedAt: currentDate,
+      };
+      setPrayList(previousState => [...previousState, newPray]);
+      await createOnePray(newPray);
+    } else {
+      const currentDate = new Date().toISOString();
+
+      const updatedPray = {
+        id: prayToEdit.id,
+        title: reason,
+        description: description,
+        updatedAt: currentDate,
+        createdAt: prayToEdit.createdAt,
+      };
+
+      const updatedPrayList = prayList.map(p => {
+        if (p.id === prayToEdit.id) {
+          return updatedPray;
+        }
+        return p;
+      });
+
+      setPrayList(updatedPrayList);
+
+      await createOnePray(updatedPray);
+
+      setEditing(false);
+    }
     setReason(null);
     setDescription(null);
     refRBSheet.current.close();
   }
 
+  function handleOpen(pray) {
+    if (pray) {
+      setReason(pray.title);
+      setDescription(pray.description);
+      setEditPray(pray);
+    }
+    refRBSheet.current.open();
+  }
+
   return (
     <>
-      <StatusBar barStyle="dark-content" />
       <SafeAreaView style={{flex: 1}}>
         {prayList.length ? (
           <Animated.FlatList
@@ -91,6 +123,8 @@ export default function PrayList() {
                 pray={item}
                 prayList={prayList}
                 setPrayList={setPrayList}
+                setEditing={setEditing}
+                handleOpen={handleOpen}
               />
             )}
           />
@@ -111,6 +145,11 @@ export default function PrayList() {
           ref={refRBSheet}
           closeOnDragDown={true}
           closeOnPressMask={false}
+          onClose={() => {
+            setEditing(false);
+            setReason(null);
+            setDescription(null);
+          }}
           height={300}
           animationType="fade"
           customStyles={{
@@ -129,7 +168,7 @@ export default function PrayList() {
                 color: '#616161',
                 marginBottom: 16,
               }}>
-              Add new pray note
+              {isEditing ? 'Edit pray' : 'Add new pray note'}
             </Text>
             <TextInput
               placeholder="Reason"
@@ -159,7 +198,9 @@ export default function PrayList() {
                   styles.saveButton,
                   {opacity: isButtonValidated() ? 1 : 0.3},
                 ]}>
-                <Text style={styles.buttonText}>Save</Text>
+                <Text style={styles.buttonText}>
+                  {isEditing ? 'Update' : 'Save'}
+                </Text>
               </LinearGradient>
             </TouchableOpacity>
           </ScrollView>
