@@ -5,7 +5,7 @@ export default class PraySchema {
     properties: {
       id: {type: 'string'},
       createdAt: 'date',
-      updatedAt: 'date',
+      updatedAt: {type: 'date', optional: true},
       title: 'string',
       description: 'string',
     },

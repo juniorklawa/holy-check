@@ -160,7 +160,9 @@ export default function PrayList() {
               backgroundColor: '#000',
             },
           }}>
-          <ScrollView style={{padding: 16, flex: 1}}>
+          <ScrollView
+            keyboardShouldPersistTaps="always"
+            style={{padding: 16, flex: 1}}>
             <Text
               style={{
                 fontFamily: 'Poppins-SemiBold',

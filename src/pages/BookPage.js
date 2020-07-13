@@ -1,24 +1,37 @@
 import {useNavigation} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
-import {Animated, FlatList, SafeAreaView, StyleSheet, View} from 'react-native';
+import {
+  Animated,
+  FlatList,
+  SafeAreaView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import {useCollapsibleStack} from 'react-navigation-collapsible';
 import BookChapter from '../components/BookChapter';
-import ProgressBook from '../components/ProgressBook';
-import {useProgress} from '../hooks/progressProvider';
+import getChapters from '../services/getChapters';
 import getBookTypeColors from '../utils/getBookTypeColors';
+import ProgressBook from '../components/ProgressBook';
 
 const BookPage = ({route}) => {
   const navigation = useNavigation();
   const {book} = route.params;
-  const {chapters} = useProgress();
+  const [chapters, setChapters] = useState([]);
   const [totalReadChapters, setTotalReadChapters] = useState(0);
+  const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
-    const filteredChapters = chapters.filter(
-      c => c.parentId === book.id && c.read,
-    );
-    setTotalReadChapters(filteredChapters.length);
-  }, [book, chapters]);
+    async function loadData() {
+      setLoading(true);
+      const storagedChapters = await getChapters(book.id);
+      setChapters(storagedChapters);
+      setTotalReadChapters(storagedChapters.length);
+      setLoading(false);
+    }
+    loadData();
+  }, [book]);
 
   const {onScroll, scrollIndicatorInsetTop} = useCollapsibleStack();
 
@@ -42,9 +55,7 @@ const BookPage = ({route}) => {
       return {
         id: chapterId,
         chapter: i + 1,
-        read: chapters.some(
-          chapter => chapter.id === chapterId && chapter.read,
-        ),
+        read: chapters.some(chapter => chapter.id === chapterId),
         section: book.section,
       };
     });
@@ -61,6 +72,10 @@ const BookPage = ({route}) => {
       lastRowElements += 1;
     }
     return items;
+  }
+
+  if (isLoading) {
+    return <Text>Loading</Text>;
   }
 
   const styles = StyleSheet.create({
@@ -93,6 +108,7 @@ const BookPage = ({route}) => {
 
   return (
     <>
+      <StatusBar barStyle="dark-content" />
       <SafeAreaView>
         <Animated.ScrollView
           contentInsetAdjustmentBehavior="automatic"
@@ -111,6 +127,7 @@ const BookPage = ({route}) => {
                 return (
                   <BookChapter
                     setTotalReadChapters={setTotalReadChapters}
+                    totalReadChapters={totalReadChapters}
                     key={item.id}
                     chapter={item.chapter}
                     type={book.type}

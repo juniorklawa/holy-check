@@ -3,6 +3,7 @@ import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import getBookTypeColors from '../utils/getBookTypeColors';
 import createOneChapter from '../services/createOneChapter';
+import createOneBookProgress from '../services/createOneBookProgress';
 import {useProgress} from '../hooks/progressProvider';
 
 export default function BookChapter({
@@ -11,10 +12,14 @@ export default function BookChapter({
   parentId,
   read,
   setTotalReadChapters,
+  totalReadChapters,
   section,
 }) {
   const [isRead, setIsRead] = useState(read);
-  const {chapters, updateChapters} = useProgress();
+
+  /**
+   * @TODO Add progress to useProgress Hook
+   */
 
   async function handleChapter() {
     setIsRead(prevState => !prevState);
@@ -23,19 +28,18 @@ export default function BookChapter({
       parentId,
       section,
       read: !isRead,
+      readAt: new Date(),
     };
     setTotalReadChapters(prevState => prevState + (isRead ? -1 : +1));
-    const chapterExists = chapters.find(c => c.id === newChapter.id);
 
-    if (chapterExists) {
-      const updatedChapters = chapters.map(c => {
-        return c.id === newChapter.id ? newChapter : c;
-      });
-      updateChapters([...updatedChapters]);
-    } else {
-      updateChapters([...chapters, newChapter]);
-    }
+    const bookProgress = {
+      id: parentId,
+      totalRead: totalReadChapters + (isRead ? -1 : +1),
+      section,
+    };
+
     await createOneChapter(newChapter);
+    await createOneBookProgress(bookProgress);
   }
 
   const styles = StyleSheet.create({

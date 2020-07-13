@@ -5,20 +5,20 @@ import React, {
   useContext,
   useEffect,
 } from 'react';
-import getChapters from '../services/getChapters';
+import getBookProgress from '../services/getBookProgress';
 import deleteAllReadChapters from '../services/deleteAllReadChapters';
 
 const ProgressContext = createContext({});
 
 export const ProgressProvider = ({children}) => {
-  const [chapters, setChapters] = useState([]);
+  const [bookProgressList, setBookProgress] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function loadData() {
       setLoading(true);
-      const storagedChapters = await getChapters();
-      setChapters(storagedChapters);
+      const storagedBookProgress = await getBookProgress();
+      setBookProgress([...storagedBookProgress]);
       setLoading(false);
     }
     loadData();
@@ -30,20 +30,20 @@ export const ProgressProvider = ({children}) => {
 
   const deleteReadChapters = useCallback(async () => {
     await deleteAllReadChapters();
-    setChapters([]);
+    setBookProgress([]);
   }, []);
 
-  const updateChapters = useCallback(updatedChapters => {
-    setChapters([...updatedChapters]);
-  }, []);
+  const updateBookProgress = updatedBooks => {
+    setBookProgress([...updatedBooks]);
+  };
 
   return (
     <ProgressContext.Provider
       value={{
-        chapters,
+        bookProgressList,
         loading,
         deleteReadChapters,
-        updateChapters,
+        updateBookProgress,
       }}>
       {children}
     </ProgressContext.Provider>

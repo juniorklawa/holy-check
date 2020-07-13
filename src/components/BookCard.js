@@ -1,16 +1,93 @@
 import React from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  Alert,
+  Vibration,
+} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import getBookTypeColors from '../utils/getBookTypeColors';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {useNavigation} from '@react-navigation/native';
+import {useProgress} from '../hooks/progressProvider';
+import createOneBookProgress from '../services/createOneBookProgress';
+import createOneChapter from '../services/createOneChapter';
 
 const BookCard = ({book, readChapters}) => {
   const {type, title, totalChapters} = book;
   const navigation = useNavigation();
+  const {bookProgressList, updateBookProgress} = useProgress();
+
+  async function showCheckAsCompletedAlert() {
+    return Alert.alert(`Check ${book.title} as read`, 'Are you sure?', [
+      {
+        text: 'No',
+        onPress: () => {
+          return;
+        },
+        style: 'cancel',
+      },
+      {
+        text: 'Yes',
+        onPress: async () => {
+          try {
+            const bookProgress = {
+              id: book.id,
+              totalRead: totalChapters,
+              section: book.section,
+            };
+            await createOneBookProgress(bookProgress);
+
+            const bookProgressExists = bookProgressList.find(
+              bp => bp.id === book.id,
+            );
+
+            const items = Array.apply(null, Array(book.totalChapters)).map(
+              (v, i) => {
+                return {
+                  id: book.id + (i + 1),
+                  parentId: book.id,
+                  section: book.section,
+                  readAt: new Date(),
+                  read: true,
+                };
+              },
+            );
+
+            if (!bookProgressExists) {
+              items.forEach(async element => await createOneChapter(element));
+
+              updateBookProgress([...bookProgressList, bookProgress]);
+
+              return;
+            }
+
+            items.forEach(async element => await createOneChapter(element));
+            const updatedProgressList = bookProgressList.map(bp => {
+              if (bp.id === book.id) {
+                return bookProgress;
+              }
+              return bp;
+            });
+
+            updateBookProgress(updatedProgressList);
+          } catch (err) {
+            console.log(err);
+          }
+        },
+      },
+    ]);
+  }
+
   return (
     <TouchableOpacity
       onPress={() => navigation.navigate('BookPage', {book})}
+      onLongPress={async () => {
+        Vibration.vibrate(50);
+        showCheckAsCompletedAlert();
+      }}
       style={{flex: 1}}>
       <LinearGradient
         start={{x: 1, y: 0}}

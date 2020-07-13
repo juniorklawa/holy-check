@@ -8,6 +8,7 @@ export default class ChapterSchema {
       note: 'string',
       section: 'string',
       parentId: 'string',
+      readAt: 'date',
     },
   };
 }

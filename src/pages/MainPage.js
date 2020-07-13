@@ -15,10 +15,13 @@ import {useCollapsibleStack} from 'react-navigation-collapsible';
 import BookCard from '../components/BookCard';
 import {NEW_TESTMENT_DATA, OLD_TESTMENT_DATA} from '../data/BOOKS_DATA';
 import {TestmentEnum} from '../enums/TestmentEnum';
+import Shimmer from 'react-native-shimmer';
 import {useProgress} from '../hooks/progressProvider';
+import getBookProgress from '../services/getBookProgress';
+import SkeletonLoader from '../components/SkeletonLoader';
 
 /**
- * TODO
+ * @TODO
  * - I18n
  * - Refactoring
  */
@@ -26,7 +29,12 @@ import {useProgress} from '../hooks/progressProvider';
 const MainPage = () => {
   const navigation = useNavigation();
   const fadeAnim = useRef(new Animated.Value(0)).current;
-  const {chapters, deleteReadChapters} = useProgress();
+  const {
+    bookProgressList,
+    updateBookProgress,
+    deleteReadChapters,
+    loading,
+  } = useProgress();
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -55,34 +63,55 @@ const MainPage = () => {
       duration: 300,
       useNativeDriver: true,
     }).start();
-  }, [navigation, fadeAnim]);
 
+    async function reloadData() {
+      const storagedBookProgressList = await getBookProgress();
+      updateBookProgress(storagedBookProgressList);
+    }
+
+    const unsubscribe = navigation.addListener('focus', () => {
+      reloadData();
+    });
+
+    return unsubscribe;
+  }, [navigation, fadeAnim, updateBookProgress]);
   const {onScroll, scrollIndicatorInsetTop} = useCollapsibleStack();
 
   function getReadChapters(id) {
-    return chapters.filter(chapter => chapter.parentId === id && chapter.read)
-      .length;
+    const book = bookProgressList.find(b => b.id === id);
+
+    if (!book) {
+      return 0;
+    }
+
+    return book.totalRead;
   }
 
   const getOldTestmentReadPercentage = useMemo(() => {
-    const readChapters = chapters.filter(
-      chapter => chapter.section === TestmentEnum.OLD,
-    ).length;
-
+    const readChapters = bookProgressList.reduce((sum, book) => {
+      if (book.section === TestmentEnum.OLD) {
+        return sum + book.totalRead;
+      }
+      return sum;
+    }, 0);
     const totalOldChapters = 929;
 
     return `${((readChapters / totalOldChapters) * 100).toFixed(2)}% read`;
-  }, [chapters]);
+  }, [bookProgressList]);
 
   const getNewTestmentReadPercentage = useMemo(() => {
-    const readChapters = chapters.filter(
-      chapter => chapter.section === TestmentEnum.NEW,
-    ).length;
+    const readChapters = bookProgressList.reduce((sum, book) => {
+      if (book.section === TestmentEnum.NEW) {
+        return sum + book.totalRead;
+      }
+
+      return sum;
+    }, 0);
 
     const totalNewChapters = 260;
 
     return `${((readChapters / totalNewChapters) * 100).toFixed(2)}% read`;
-  }, [chapters]);
+  }, [bookProgressList]);
 
   async function resetProgress() {
     return Alert.alert('Reset all your reading progress!', 'Are you sure?', [
@@ -101,60 +130,69 @@ const MainPage = () => {
   }
 
   return (
-    <>
-      <SafeAreaView>
-        <Animated.ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          showsVerticalScrollIndicator={false}
-          onScroll={onScroll}
-          contentContainerStyle={{paddingTop: 80}}
-          scrollIndicatorInsets={{top: scrollIndicatorInsetTop}}
-          style={styles.scrollView}>
-          <Animated.View
-            style={[
-              styles.body,
-              {
-                opacity: fadeAnim,
-              },
-            ]}>
-            <FlatList
-              showsVerticalScrollIndicator={false}
-              ListHeaderComponent={
-                <View style={{marginLeft: 4}}>
-                  <Text style={styles.sectionTitle}>Old Testament</Text>
-                  <Text style={styles.sectionSubtitle}>
-                    {getOldTestmentReadPercentage}
-                  </Text>
-                </View>
-              }
-              data={OLD_TESTMENT_DATA}
-              renderItem={({item}) => (
-                <BookCard readChapters={getReadChapters(item.id)} book={item} />
-              )}
-              numColumns={3}
-              keyExtractor={(item, index) => index.toString()}
-            />
-
-            <FlatList
-              ListHeaderComponent={
-                <View>
-                  <Text style={styles.sectionTitle}>New Testament</Text>
-                  <Text style={styles.sectionSubtitle}>
-                    {getNewTestmentReadPercentage}
-                  </Text>
-                </View>
-              }
-              data={NEW_TESTMENT_DATA}
-              renderItem={({item}) => (
-                <BookCard readChapters={getReadChapters(item.id)} book={item} />
-              )}
-              numColumns={3}
-              keyExtractor={(item, index) => index.toString()}
-            />
-          </Animated.View>
-        </Animated.ScrollView>
-      </SafeAreaView>
-    </>
+    <SafeAreaView>
+      <Animated.ScrollView
+        contentInsetAdjustmentBehavior="automatic"
+        showsVerticalScrollIndicator={false}
+        onScroll={onScroll}
+        contentContainerStyle={{paddingTop: 80}}
+        scrollIndicatorInsets={{top: scrollIndicatorInsetTop}}
+        style={styles.scrollView}>
+        <Animated.View
+          style={[
+            styles.body,
+            {
+              opacity: fadeAnim,
+            },
+          ]}>
+          {!loading ? (
+            <>
+              <FlatList
+                showsVerticalScrollIndicator={false}
+                ListHeaderComponent={
+                  <View style={{marginLeft: 4}}>
+                    <Text style={styles.sectionTitle}>Old Testament</Text>
+                    <Text style={styles.sectionSubtitle}>
+                      {getOldTestmentReadPercentage}
+                    </Text>
+                  </View>
+                }
+                data={OLD_TESTMENT_DATA}
+                renderItem={({item}) => (
+                  <BookCard
+                    readChapters={getReadChapters(item.id)}
+                    book={item}
+                  />
+                )}
+                numColumns={3}
+                keyExtractor={(item, index) => index.toString()}
+              />
+              <FlatList
+                ListHeaderComponent={
+                  <View style={{marginLeft: 4}}>
+                    <Text style={styles.sectionTitle}>New Testament</Text>
+                    <Text style={styles.sectionSubtitle}>
+                      {getNewTestmentReadPercentage}
+                    </Text>
+                  </View>
+                }
+                data={NEW_TESTMENT_DATA}
+                renderItem={({item}) => (
+                  <BookCard
+                    readChapters={getReadChapters(item.id)}
+                    book={item}
+                  />
+                )}
+                numColumns={3}
+                keyExtractor={(item, index) => index.toString()}
+              />
+            </>
+          ) : (
+            <SkeletonLoader />
+          )}
+        </Animated.View>
+      </Animated.ScrollView>
+    </SafeAreaView>
   );
 };
 
