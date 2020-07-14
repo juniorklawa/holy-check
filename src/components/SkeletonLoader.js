@@ -52,7 +52,7 @@ const SkeletonLoader = () => {
       <FlatList
         data={data}
         style={{marginTop: 16}}
-        renderItem={({item}) => (
+        renderItem={() => (
           <Shimmer
             style={{
               margin: 6,

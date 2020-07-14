@@ -3,14 +3,13 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View,
   Vibration,
+  View,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import getBookTypeColors from '../utils/getBookTypeColors';
-import createOneChapter from '../services/createOneChapter';
 import createOneBookProgress from '../services/createOneBookProgress';
-import {useProgress} from '../hooks/progressProvider';
+import createOneChapter from '../services/createOneChapter';
+import getBookTypeColors from '../utils/getBookTypeColors';
 
 export default function BookChapter({
   chapter,

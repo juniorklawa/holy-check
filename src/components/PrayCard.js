@@ -1,8 +1,8 @@
+import moment from 'moment';
 import React from 'react';
 import {Alert, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import deleteOnePray from '../services/deleteOnePray';
-import moment from 'moment';
 
 const PrayCard = ({pray, prayList, setPrayList, handleOpen, setEditing}) => {
   async function deletePray(selectedPray) {
@@ -35,15 +35,7 @@ const PrayCard = ({pray, prayList, setPrayList, handleOpen, setEditing}) => {
         setEditing(true);
         handleOpen(pray);
       }}
-      style={{
-        width: '100%',
-        minHeight: 70,
-        backgroundColor: '#F5F5F5',
-        flexDirection: 'row',
-        marginTop: 4,
-        borderRadius: 5,
-        padding: 16,
-      }}>
+      style={styles.container}>
       <View style={{flex: 1}}>
         {pray.answeredAt && (
           <Text style={styles.answeredAt}>
@@ -68,6 +60,15 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#424242',
     fontFamily: 'Poppins-SemiBold',
+  },
+  container: {
+    width: '100%',
+    minHeight: 70,
+    backgroundColor: '#F5F5F5',
+    flexDirection: 'row',
+    marginTop: 4,
+    borderRadius: 5,
+    padding: 16,
   },
   answeredAt: {
     fontSize: 12,

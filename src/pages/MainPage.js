@@ -1,5 +1,5 @@
 import {useNavigation} from '@react-navigation/native';
-import React, {useEffect, useMemo, useRef} from 'react';
+import React, {useCallback, useEffect, useMemo, useRef} from 'react';
 import {
   Alert,
   Animated,
@@ -13,18 +13,11 @@ import {
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {useCollapsibleStack} from 'react-navigation-collapsible';
 import BookCard from '../components/BookCard';
+import SkeletonLoader from '../components/SkeletonLoader';
 import {NEW_TESTMENT_DATA, OLD_TESTMENT_DATA} from '../data/BOOKS_DATA';
 import {TestmentEnum} from '../enums/TestmentEnum';
-import Shimmer from 'react-native-shimmer';
 import {useProgress} from '../hooks/progressProvider';
 import getBookProgress from '../services/getBookProgress';
-import SkeletonLoader from '../components/SkeletonLoader';
-
-/**
- * @TODO
- * - I18n
- * - Refactoring
- */
 
 const MainPage = () => {
   const navigation = useNavigation();
@@ -77,15 +70,18 @@ const MainPage = () => {
   }, [navigation, fadeAnim, updateBookProgress]);
   const {onScroll, scrollIndicatorInsetTop} = useCollapsibleStack();
 
-  function getReadChapters(id) {
-    const book = bookProgressList.find(b => b.id === id);
+  const getReadChapters = useCallback(
+    id => {
+      const book = bookProgressList.find(b => b.id === id);
 
-    if (!book) {
-      return 0;
-    }
+      if (!book) {
+        return 0;
+      }
 
-    return book.totalRead;
-  }
+      return book.totalRead;
+    },
+    [bookProgressList],
+  );
 
   const getOldTestmentReadPercentage = useMemo(() => {
     const readChapters = bookProgressList.reduce((sum, book) => {

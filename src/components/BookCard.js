@@ -57,14 +57,19 @@ const BookCard = ({book, readChapters}) => {
             );
 
             if (!bookProgressExists) {
-              items.forEach(async element => await createOneChapter(element));
+              for (const element of items) {
+                await createOneChapter(element);
+              }
 
               updateBookProgress([...bookProgressList, bookProgress]);
 
               return;
             }
 
-            items.forEach(async element => await createOneChapter(element));
+            for (const element of items) {
+              await createOneChapter(element);
+            }
+
             const updatedProgressList = bookProgressList.map(bp => {
               if (bp.id === book.id) {
                 return bookProgress;
@@ -86,7 +91,7 @@ const BookCard = ({book, readChapters}) => {
       onPress={() => navigation.navigate('BookPage', {book})}
       onLongPress={async () => {
         Vibration.vibrate(50);
-        showCheckAsCompletedAlert();
+        await showCheckAsCompletedAlert();
       }}
       style={{flex: 1}}>
       <LinearGradient

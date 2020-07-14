@@ -142,12 +142,7 @@ export default function PrayList() {
             )}
           />
         ) : (
-          <View
-            style={{
-              justifyContent: 'center',
-              alignItems: 'center',
-              height: '100%',
-            }}>
+          <View style={styles.emptyContainer}>
             <Text style={{fontFamily: 'Poppins-Light'}}>
               Press + to add a new pray
             </Text>
@@ -176,22 +171,10 @@ export default function PrayList() {
           <ScrollView
             keyboardShouldPersistTaps="always"
             style={{padding: 16, flex: 1}}>
-            <Text
-              style={{
-                fontFamily: 'Poppins-SemiBold',
-                fontSize: 20,
-                color: '#616161',
-                marginBottom: 16,
-              }}>
+            <Text style={styles.backDropTitle}>
               {isEditing ? 'Edit pray' : 'Add new pray note'}
             </Text>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center',
-                marginTop: -10,
-                marginBottom: 10,
-              }}>
+            <View style={styles.answeredContainer}>
               <Text style={styles.answered}>Mark as answered</Text>
               <CheckBox
                 disabled={false}
@@ -255,10 +238,27 @@ const styles = StyleSheet.create({
     height: 40,
     borderRadius: 5,
   },
+  emptyContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '100%',
+  },
   answered: {
     fontSize: 12,
     color: '#757575',
     fontFamily: 'Poppins-Medium',
+  },
+  backDropTitle: {
+    fontFamily: 'Poppins-SemiBold',
+    fontSize: 20,
+    color: '#616161',
+    marginBottom: 16,
+  },
+  answeredContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: -10,
+    marginBottom: 10,
   },
   buttonText: {
     fontFamily: 'Poppins-Medium',
