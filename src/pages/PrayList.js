@@ -1,4 +1,5 @@
 import {useNavigation} from '@react-navigation/native';
+import CheckBox from '@react-native-community/checkbox';
 import React, {useEffect, useRef, useState} from 'react';
 import {
   Animated,
@@ -29,6 +30,7 @@ export default function PrayList() {
   const refRBSheet = useRef();
 
   const {onScroll, scrollIndicatorInsetTop} = useCollapsibleStack();
+  const [toggleCheckBox, setToggleCheckBox] = useState(false);
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -65,6 +67,7 @@ export default function PrayList() {
         description: description,
         createdAt: currentDate,
         updatedAt: currentDate,
+        answeredAt: toggleCheckBox ? currentDate : null,
       };
       setPrayList(previousState => [...previousState, newPray]);
       await createOnePray(newPray);
@@ -77,6 +80,12 @@ export default function PrayList() {
         description: description,
         updatedAt: currentDate,
         createdAt: prayToEdit.createdAt,
+        answeredAt:
+          toggleCheckBox === true
+            ? prayToEdit.answeredAt
+              ? prayToEdit.answeredAt
+              : currentDate
+            : null,
       };
 
       const updatedPrayList = prayList.map(p => {
@@ -94,6 +103,7 @@ export default function PrayList() {
     }
     setReason(null);
     setDescription(null);
+    setToggleCheckBox(false);
     refRBSheet.current.close();
   }
 
@@ -102,6 +112,9 @@ export default function PrayList() {
       setReason(pray.title);
       setDescription(pray.description);
       setEditPray(pray);
+      setToggleCheckBox(!!pray.answeredAt);
+    } else {
+      setToggleCheckBox(false);
     }
     refRBSheet.current.open();
   }
@@ -150,7 +163,7 @@ export default function PrayList() {
             setReason(null);
             setDescription(null);
           }}
-          height={300}
+          height={350}
           animationType="fade"
           customStyles={{
             wrapper: {
@@ -172,6 +185,24 @@ export default function PrayList() {
               }}>
               {isEditing ? 'Edit pray' : 'Add new pray note'}
             </Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                marginTop: -10,
+                marginBottom: 10,
+              }}>
+              <Text style={styles.answered}>Mark as answered</Text>
+              <CheckBox
+                disabled={false}
+                value={toggleCheckBox}
+                onValueChange={() =>
+                  toggleCheckBox
+                    ? setToggleCheckBox(false)
+                    : setToggleCheckBox(true)
+                }
+              />
+            </View>
             <TextInput
               placeholder="Reason"
               style={styles.prayTitle}
@@ -223,6 +254,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#42A5F5',
     height: 40,
     borderRadius: 5,
+  },
+  answered: {
+    fontSize: 12,
+    color: '#757575',
+    fontFamily: 'Poppins-Medium',
   },
   buttonText: {
     fontFamily: 'Poppins-Medium',

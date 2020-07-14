@@ -1,5 +1,11 @@
 import React, {useState} from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  Vibration,
+} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import getBookTypeColors from '../utils/getBookTypeColors';
 import createOneChapter from '../services/createOneChapter';
@@ -16,10 +22,6 @@ export default function BookChapter({
   section,
 }) {
   const [isRead, setIsRead] = useState(read);
-
-  /**
-   * @TODO Add progress to useProgress Hook
-   */
 
   async function handleChapter() {
     setIsRead(prevState => !prevState);
@@ -82,7 +84,10 @@ export default function BookChapter({
 
   return (
     <TouchableOpacity
-      onPress={async () => await handleChapter()}
+      onPress={async () => {
+        Vibration.vibrate(20);
+        await handleChapter();
+      }}
       style={{flex: 1}}>
       <View style={styles.overlay}>
         <LinearGradient

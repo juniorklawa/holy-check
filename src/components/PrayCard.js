@@ -2,6 +2,7 @@ import React from 'react';
 import {Alert, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import deleteOnePray from '../services/deleteOnePray';
+import moment from 'moment';
 
 const PrayCard = ({pray, prayList, setPrayList, handleOpen, setEditing}) => {
   async function deletePray(selectedPray) {
@@ -11,7 +12,7 @@ const PrayCard = ({pray, prayList, setPrayList, handleOpen, setEditing}) => {
   }
 
   async function showDeleteAlert(selectedPray) {
-    return Alert.alert('Reset all your pray notes!', 'Are you sure?', [
+    return Alert.alert('Delete pray note', 'Are you sure?', [
       {
         text: 'No',
         onPress: () => {
@@ -44,6 +45,12 @@ const PrayCard = ({pray, prayList, setPrayList, handleOpen, setEditing}) => {
         padding: 16,
       }}>
       <View style={{flex: 1}}>
+        {pray.answeredAt && (
+          <Text style={styles.answeredAt}>
+            {`Answered at ${moment(pray.answeredAt).format('DD/MM/YYYY')} `}
+          </Text>
+        )}
+
         <Text style={styles.cardTitle}>{pray.title}</Text>
         <Text style={styles.cardSubtitle}>{pray.description}</Text>
       </View>
@@ -61,6 +68,11 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#424242',
     fontFamily: 'Poppins-SemiBold',
+  },
+  answeredAt: {
+    fontSize: 12,
+    color: '#9E9E9E',
+    fontFamily: 'Poppins-Medium',
   },
   cardSubtitle: {
     fontSize: 12,

@@ -52,11 +52,13 @@ const BookPage = ({route}) => {
     const columns = 3;
     let items = Array.apply(null, Array(book.totalChapters)).map((v, i) => {
       const chapterId = book.id + (i + 1).toString();
+      const currentChapter = chapters.find(chapter => chapter.id === chapterId);
       return {
         id: chapterId,
         chapter: i + 1,
-        read: chapters.some(chapter => chapter.id === chapterId),
+        read: !!currentChapter,
         section: book.section,
+        readAt: currentChapter ? currentChapter.readAt : null,
       };
     });
 
