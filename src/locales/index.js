@@ -8,8 +8,9 @@ const normalizeTranslate = {
   en_US: 'en_US',
   pt_BR: 'pt_BR',
   en: 'en_US',
+  es: 'es_ES',
+  es_ES: 'es_ES',
   pt_US: 'pt_BR',
-  es: 'es-ES',
 };
 
 const getLanguageByDevice = () => {
@@ -19,11 +20,10 @@ const getLanguageByDevice = () => {
 };
 
 I18n.translations = {
-  en,
-  pt,
-  es,
+  en_US: en,
+  pt_BR: pt,
+  es_ES: es,
 };
-
 const setLanguageToI18n = () => {
   const language = getLanguageByDevice();
   const translateNormalize = normalizeTranslate[language];

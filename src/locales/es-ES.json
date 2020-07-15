@@ -17,7 +17,8 @@
     "reason": "Razón",
     "description": "Descripción",
     "update": "Actualizar",
-    "save": "Guardar"
+    "save": "Guardar",
+    "empty_list": "Presione + para agregar una nueva oración"
   },
   "actions": {
     "yes": "Si",
