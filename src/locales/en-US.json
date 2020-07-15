@@ -17,7 +17,8 @@
     "reason": "Reason",
     "description": "Description",
     "update": "Update",
-    "save": "Save"
+    "save": "Save",
+    "empty_list": "Press + to add a new pray"
   },
   "actions": {
     "yes": "Yes",

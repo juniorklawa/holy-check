@@ -1,6 +1,6 @@
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import CheckBox from '@react-native-community/checkbox';
-import React, {useEffect, useRef, useState} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   Animated,
   SafeAreaView,
@@ -9,17 +9,18 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  Platform,
 } from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
+import { ScrollView } from 'react-native-gesture-handler';
 import LinearGradient from 'react-native-linear-gradient';
 import RBSheet from 'react-native-raw-bottom-sheet';
 import UUIDGenerator from 'react-native-uuid-generator';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import {useCollapsibleStack} from 'react-navigation-collapsible';
+import { useCollapsibleStack } from 'react-navigation-collapsible';
 import PrayCard from '../components/PrayCard';
 import createOnePray from '../services/createOnePray';
 import getPrays from '../services/getPrays';
-import {translate} from '../locales';
+import { translate } from '../locales';
 
 export default function PrayList() {
   const navigation = useNavigation();
@@ -30,7 +31,7 @@ export default function PrayList() {
   const [prayToEdit, setEditPray] = useState(null);
   const refRBSheet = useRef();
 
-  const {onScroll, scrollIndicatorInsetTop} = useCollapsibleStack();
+  const { onScroll, scrollIndicatorInsetTop } = useCollapsibleStack();
   const [toggleCheckBox, setToggleCheckBox] = useState(false);
 
   React.useLayoutEffect(() => {
@@ -38,8 +39,8 @@ export default function PrayList() {
       headerRight: () => (
         <TouchableOpacity
           onPress={() => handleOpen()}
-          hitSlop={{top: 20, bottom: 20, left: 50, right: 50}}
-          style={{marginRight: 18}}>
+          hitSlop={{ top: 20, bottom: 20, left: 50, right: 50 }}
+          style={{ marginRight: 18 }}>
           <Icon name="plus" color={'#000'} size={20} />
         </TouchableOpacity>
       ),
@@ -122,16 +123,16 @@ export default function PrayList() {
 
   return (
     <>
-      <SafeAreaView style={{flex: 1}}>
+      <SafeAreaView style={{ flex: 1 }}>
         {prayList.length ? (
           <Animated.FlatList
             style={styles.body}
-            contentContainerStyle={{paddingTop: 80}}
-            scrollIndicatorInsets={{top: scrollIndicatorInsetTop}}
+            contentContainerStyle={{ paddingTop: 80 }}
+            scrollIndicatorInsets={{ top: scrollIndicatorInsetTop }}
             showsVerticalScrollIndicator={false}
             onScroll={onScroll}
             data={prayList}
-            renderItem={({item}) => (
+            renderItem={({ item }) => (
               <PrayCard
                 key={item.id}
                 pray={item}
@@ -143,12 +144,12 @@ export default function PrayList() {
             )}
           />
         ) : (
-          <View style={styles.emptyContainer}>
-            <Text style={{fontFamily: 'Poppins-Light'}}>
-              Press + to add a new pray
+            <View style={styles.emptyContainer}>
+              <Text style={{ fontFamily: 'Poppins-Light' }}>
+                Press + to add a new pray
             </Text>
-          </View>
-        )}
+            </View>
+          )}
 
         <RBSheet
           ref={refRBSheet}
@@ -171,7 +172,7 @@ export default function PrayList() {
           }}>
           <ScrollView
             keyboardShouldPersistTaps="always"
-            style={{padding: 16, flex: 1}}>
+            style={{ padding: 16, flex: 1 }}>
             <Text style={styles.backDropTitle}>
               {isEditing
                 ? translate('pray_list.edit_pray')
@@ -212,12 +213,12 @@ export default function PrayList() {
               disabled={!isButtonValidated()}
               onPress={async () => await handlePrayNote()}>
               <LinearGradient
-                start={{x: 1, y: 0}}
-                end={{x: 0, y: 3}}
+                start={{ x: 1, y: 0 }}
+                end={{ x: 0, y: 3 }}
                 colors={['#1E88E5', '#42A5F5']}
                 style={[
                   styles.saveButton,
-                  {opacity: isButtonValidated() ? 1 : 0.3},
+                  { opacity: isButtonValidated() ? 1 : 0.3 },
                 ]}>
                 <Text style={styles.buttonText}>
                   {isEditing
@@ -251,8 +252,9 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   answered: {
-    fontSize: 12,
+    fontSize: 14,
     color: '#757575',
+    marginRight: Platform.OS === 'ios' ? 16 : 0,
     fontFamily: 'Poppins-Medium',
   },
   backDropTitle: {

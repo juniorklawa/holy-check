@@ -1,18 +1,19 @@
 import React from 'react';
-import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
-import {createCollapsibleStack} from 'react-navigation-collapsible';
+import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
+import { createCollapsibleStack } from 'react-navigation-collapsible';
 
 import MainPage from '../pages/MainPage';
 import BookPage from '../pages/BookPage';
 import PrayList from '../pages/PrayList';
-import {translate} from '../locales';
+import { translate } from '../locales';
 const App = createStackNavigator();
 
 const AppRoutes = () => (
   <App.Navigator
     screenOptions={{
       ...TransitionPresets.SlideFromRightIOS,
-      cardStyle: {backgroundColor: '#FFF'},
+      cardStyle: { backgroundColor: '#FFF' },
+      headerTintColor: '#000',
     }}>
     {createCollapsibleStack(
       <App.Screen

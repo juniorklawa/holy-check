@@ -1,5 +1,5 @@
-import {useNavigation} from '@react-navigation/native';
-import React, {useEffect, useState} from 'react';
+import { useNavigation } from '@react-navigation/native';
+import React, { useEffect, useState } from 'react';
 import {
   Animated,
   FlatList,
@@ -8,28 +8,31 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import {useCollapsibleStack} from 'react-navigation-collapsible';
+import { useCollapsibleStack } from 'react-navigation-collapsible';
 import BookChapter from '../components/BookChapter';
 import ProgressBook from '../components/ProgressBook';
 import getChapters from '../services/getChapters';
 import getBookTypeColors from '../utils/getBookTypeColors';
 
-const BookPage = ({route}) => {
+const BookPage = ({ route }) => {
   const navigation = useNavigation();
-  const {book} = route.params;
+  const { book } = route.params;
   const [chapters, setChapters] = useState([]);
+  const [isLoading, setLoading] = useState(false);
   const [totalReadChapters, setTotalReadChapters] = useState(0);
 
   useEffect(() => {
     async function loadData() {
+      setLoading(true);
       const storagedChapters = await getChapters(book.id);
       setChapters(storagedChapters);
       setTotalReadChapters(storagedChapters.length);
+      setLoading(false);
     }
     loadData();
   }, [book]);
 
-  const {onScroll, scrollIndicatorInsetTop} = useCollapsibleStack();
+  const { onScroll, scrollIndicatorInsetTop, containerPaddingTop } = useCollapsibleStack();
 
   React.useLayoutEffect(() => {
     navigation.setOptions({
@@ -73,17 +76,11 @@ const BookPage = ({route}) => {
   }
 
   const styles = StyleSheet.create({
-    emptyItem: {width: 100, height: 100, padding: 8, margin: 12},
+    emptyItem: { width: 100, height: 100, padding: 8, margin: 12 },
 
     body: {
       marginHorizontal: 12,
-      marginTop: 16,
-    },
-    sectionTitle: {
-      fontSize: 22,
-      marginVertical: 16,
-      marginHorizontal: 4,
-      fontFamily: 'Poppins-Bold',
+      // marginTop: 16,
     },
     progressText: {
       fontSize: 16,
@@ -108,13 +105,13 @@ const BookPage = ({route}) => {
           contentInsetAdjustmentBehavior="automatic"
           showsVerticalScrollIndicator={false}
           onScroll={onScroll}
-          contentContainerStyle={{paddingTop: 80}}
-          scrollIndicatorInsets={{top: scrollIndicatorInsetTop}}
+          contentContainerStyle={{ paddingTop: containerPaddingTop }}
+          scrollIndicatorInsets={{ top: scrollIndicatorInsetTop }}
           style={styles.scrollView}>
           <View style={styles.body}>
-            <FlatList
+            {!isLoading ? <FlatList
               data={createChaptersRow()}
-              renderItem={({item}) => {
+              renderItem={({ item }) => {
                 if (item.empty) {
                   return <View style={styles.emptyItem} />;
                 }
@@ -132,7 +129,7 @@ const BookPage = ({route}) => {
                 );
               }}
               numColumns={3}
-            />
+            /> : null}
           </View>
         </Animated.ScrollView>
       </SafeAreaView>
