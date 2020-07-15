@@ -2,6 +2,7 @@ import {Platform, NativeModules} from 'react-native';
 import I18n from 'i18n-js';
 import en from './en-US';
 import pt from './pt-BR';
+import es from './es-ES';
 
 const normalizeTranslate = {
   en_US: 'en_US',
