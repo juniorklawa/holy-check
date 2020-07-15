@@ -18,6 +18,7 @@ import {NEW_TESTMENT_DATA, OLD_TESTMENT_DATA} from '../data/BOOKS_DATA';
 import {TestmentEnum} from '../enums/TestmentEnum';
 import {useProgress} from '../hooks/progressProvider';
 import getBookProgress from '../services/getBookProgress';
+import {translate} from '../locales/index';
 
 const MainPage = () => {
   const navigation = useNavigation();
@@ -92,7 +93,9 @@ const MainPage = () => {
     }, 0);
     const totalOldChapters = 929;
 
-    return `${((readChapters / totalOldChapters) * 100).toFixed(2)}% read`;
+    return `${((readChapters / totalOldChapters) * 100).toFixed(
+      2,
+    )}% ${translate('main_page.read')}`;
   }, [bookProgressList]);
 
   const getNewTestmentReadPercentage = useMemo(() => {
@@ -106,23 +109,29 @@ const MainPage = () => {
 
     const totalNewChapters = 260;
 
-    return `${((readChapters / totalNewChapters) * 100).toFixed(2)}% read`;
+    return `${((readChapters / totalNewChapters) * 100).toFixed(
+      2,
+    )}% ${translate('main_page.read')}`;
   }, [bookProgressList]);
 
   async function resetProgress() {
-    return Alert.alert('Reset all your reading progress!', 'Are you sure?', [
-      {
-        text: 'No',
-        onPress: () => {
-          return;
+    return Alert.alert(
+      translate('main_page.reset_reading_progress'),
+      translate('actions.are_you_sure'),
+      [
+        {
+          text: translate('actions.no'),
+          onPress: () => {
+            return;
+          },
+          style: 'cancel',
         },
-        style: 'cancel',
-      },
-      {
-        text: 'Yes',
-        onPress: async () => deleteReadChapters(),
-      },
-    ]);
+        {
+          text: translate('actions.yes'),
+          onPress: async () => deleteReadChapters(),
+        },
+      ],
+    );
   }
 
   return (
@@ -147,7 +156,9 @@ const MainPage = () => {
                 showsVerticalScrollIndicator={false}
                 ListHeaderComponent={
                   <View style={{marginLeft: 4}}>
-                    <Text style={styles.sectionTitle}>Old Testament</Text>
+                    <Text style={styles.sectionTitle}>
+                      {translate('main_page.old_testment')}
+                    </Text>
                     <Text style={styles.sectionSubtitle}>
                       {getOldTestmentReadPercentage}
                     </Text>
@@ -166,7 +177,9 @@ const MainPage = () => {
               <FlatList
                 ListHeaderComponent={
                   <View style={{marginLeft: 4}}>
-                    <Text style={styles.sectionTitle}>New Testament</Text>
+                    <Text style={styles.sectionTitle}>
+                      {translate('main_page.new_testment')}
+                    </Text>
                     <Text style={styles.sectionSubtitle}>
                       {getNewTestmentReadPercentage}
                     </Text>

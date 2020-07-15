@@ -5,6 +5,7 @@ import {createCollapsibleStack} from 'react-navigation-collapsible';
 import MainPage from '../pages/MainPage';
 import BookPage from '../pages/BookPage';
 import PrayList from '../pages/PrayList';
+import {translate} from '../locales';
 const App = createStackNavigator();
 
 const AppRoutes = () => (
@@ -16,7 +17,7 @@ const AppRoutes = () => (
     {createCollapsibleStack(
       <App.Screen
         options={{
-          title: 'Books',
+          title: translate('navigation.books'),
           headerTitleAlign: 'center',
           headerTitleStyle: {
             fontFamily: 'Poppins-SemiBold',
@@ -55,7 +56,7 @@ const AppRoutes = () => (
     {createCollapsibleStack(
       <App.Screen
         options={{
-          title: 'Pray list',
+          title: translate('navigation.pray_list'),
           headerTitleAlign: 'center',
           headerTitleStyle: {
             fontFamily: 'Poppins-SemiBold',

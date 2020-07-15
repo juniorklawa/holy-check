@@ -19,6 +19,7 @@ import {useCollapsibleStack} from 'react-navigation-collapsible';
 import PrayCard from '../components/PrayCard';
 import createOnePray from '../services/createOnePray';
 import getPrays from '../services/getPrays';
+import {translate} from '../locales';
 
 export default function PrayList() {
   const navigation = useNavigation();
@@ -172,10 +173,14 @@ export default function PrayList() {
             keyboardShouldPersistTaps="always"
             style={{padding: 16, flex: 1}}>
             <Text style={styles.backDropTitle}>
-              {isEditing ? 'Edit pray' : 'Add new pray note'}
+              {isEditing
+                ? translate('pray_list.edit_pray')
+                : translate('pray_list.add_new_pray')}
             </Text>
             <View style={styles.answeredContainer}>
-              <Text style={styles.answered}>Mark as answered</Text>
+              <Text style={styles.answered}>
+                {translate('pray_list.mark_as_answered')}
+              </Text>
               <CheckBox
                 disabled={false}
                 value={toggleCheckBox}
@@ -187,13 +192,13 @@ export default function PrayList() {
               />
             </View>
             <TextInput
-              placeholder="Reason"
+              placeholder={translate('pray_list.reason')}
               style={styles.prayTitle}
               onChangeText={text => setReason(text)}
               value={reason}
             />
             <TextInput
-              placeholder="Description"
+              placeholder={translate('pray_list.description')}
               multiline
               style={styles.prayDescription}
               onChangeText={text => setDescription(text)}
@@ -215,7 +220,9 @@ export default function PrayList() {
                   {opacity: isButtonValidated() ? 1 : 0.3},
                 ]}>
                 <Text style={styles.buttonText}>
-                  {isEditing ? 'Update' : 'Save'}
+                  {isEditing
+                    ? translate('pray_list.update')
+                    : translate('pray_list.save')}
                 </Text>
               </LinearGradient>
             </TouchableOpacity>

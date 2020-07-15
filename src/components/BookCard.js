@@ -14,6 +14,7 @@ import {useNavigation} from '@react-navigation/native';
 import {useProgress} from '../hooks/progressProvider';
 import createOneBookProgress from '../services/createOneBookProgress';
 import createOneChapter from '../services/createOneChapter';
+import {translate} from '../locales';
 
 const BookCard = ({book, readChapters}) => {
   const {type, title, totalChapters} = book;
@@ -21,69 +22,75 @@ const BookCard = ({book, readChapters}) => {
   const {bookProgressList, updateBookProgress} = useProgress();
 
   async function showCheckAsCompletedAlert() {
-    return Alert.alert(`Check ${book.title} as read`, 'Are you sure?', [
-      {
-        text: 'No',
-        onPress: () => {
-          return;
+    return Alert.alert(
+      `${translate('words.check')} ${book.title} ${translate('words.as_read')}`,
+      `${translate('actions.are_you_sure')}`,
+      [
+        {
+          text: translate('actions.no'),
+          onPress: () => {
+            return;
+          },
+          style: 'cancel',
         },
-        style: 'cancel',
-      },
-      {
-        text: 'Yes',
-        onPress: async () => {
-          try {
-            const bookProgress = {
-              id: book.id,
-              totalRead: totalChapters,
-              section: book.section,
-            };
-            await createOneBookProgress(bookProgress);
+        {
+          text: translate('actions.yes'),
+          onPress: async () => {
+            try {
+              const bookProgress = {
+                id: book.id,
+                totalRead: totalChapters,
+                section: book.section,
+              };
+              await createOneBookProgress(bookProgress);
 
-            const bookProgressExists = bookProgressList.find(
-              bp => bp.id === book.id,
-            );
+              const bookProgressExists = bookProgressList.find(
+                bp => bp.id === book.id,
+              );
 
-            const items = Array.apply(null, Array(book.totalChapters)).map(
-              (v, i) => {
-                return {
-                  id: book.id + (i + 1),
-                  parentId: book.id,
-                  section: book.section,
-                  readAt: new Date(),
-                  read: true,
-                };
-              },
-            );
+              const items = Array.apply(null, Array(book.totalChapters)).map(
+                (v, i) => {
+                  return {
+                    id: book.id + (i + 1),
+                    parentId: book.id,
+                    section: book.section,
+                    readAt: new Date(),
+                    read: true,
+                  };
+                },
+              );
 
-            if (!bookProgressExists) {
+              if (!bookProgressExists) {
+                // eslint-disable-next-line no-unused-vars
+                for (const element of items) {
+                  await createOneChapter(element);
+                }
+
+                updateBookProgress([...bookProgressList, bookProgress]);
+
+                return;
+              }
+
+              // eslint-disable-next-line no-unused-vars
               for (const element of items) {
                 await createOneChapter(element);
               }
 
-              updateBookProgress([...bookProgressList, bookProgress]);
+              const updatedProgressList = bookProgressList.map(bp => {
+                if (bp.id === book.id) {
+                  return bookProgress;
+                }
+                return bp;
+              });
 
-              return;
+              updateBookProgress(updatedProgressList);
+            } catch (err) {
+              console.log(err);
             }
-
-            for (const element of items) {
-              await createOneChapter(element);
-            }
-
-            const updatedProgressList = bookProgressList.map(bp => {
-              if (bp.id === book.id) {
-                return bookProgress;
-              }
-              return bp;
-            });
-
-            updateBookProgress(updatedProgressList);
-          } catch (err) {
-            console.log(err);
-          }
+          },
         },
-      },
-    ]);
+      ],
+    );
   }
 
   return (

@@ -3,6 +3,7 @@ import React from 'react';
 import {Alert, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import deleteOnePray from '../services/deleteOnePray';
+import {translate} from '../locales';
 
 const PrayCard = ({pray, prayList, setPrayList, handleOpen, setEditing}) => {
   async function deletePray(selectedPray) {
@@ -39,7 +40,9 @@ const PrayCard = ({pray, prayList, setPrayList, handleOpen, setEditing}) => {
       <View style={{flex: 1}}>
         {pray.answeredAt && (
           <Text style={styles.answeredAt}>
-            {`Answered at ${moment(pray.answeredAt).format('DD/MM/YYYY')} `}
+            {`${translate('pray_list.answered_at')} ${moment(
+              pray.answeredAt,
+            ).format('DD/MM/YYYY')} `}
           </Text>
         )}
 
