@@ -11,6 +11,7 @@
   },
   "pray_list": {
     "add_new_pray": "Add new pray",
+    "delete_pray": "Delete pray?",
     "edit_pray": "Edit pray",
     "mark_as_answered": "Mark as answered",
     "answered_at": "Answered at ",

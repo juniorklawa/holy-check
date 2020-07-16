@@ -3,6 +3,9 @@ import I18n from 'i18n-js';
 import en from './en-US';
 import pt from './pt-BR';
 import es from './es-ES';
+import fr from './fr-FR';
+import de from './de-DE';
+import ru from './ru-RU';
 
 const normalizeTranslate = {
   en_US: 'en_US',
@@ -11,6 +14,12 @@ const normalizeTranslate = {
   es: 'es_ES',
   es_ES: 'es_ES',
   pt_US: 'pt_BR',
+  fr: 'fr_FR',
+  fr_FR: 'fr_FR',
+  de: 'de_DE',
+  de_DE: 'de_DE',
+  ru: 'ru_RU',
+  ru_RU: 'ru_RU',
 };
 
 const getLanguageByDevice = () => {
@@ -23,6 +32,9 @@ I18n.translations = {
   en_US: en,
   pt_BR: pt,
   es_ES: es,
+  fr_FR: fr,
+  ru_RU: ru,
+  de_DE: de,
 };
 const setLanguageToI18n = () => {
   const language = getLanguageByDevice();

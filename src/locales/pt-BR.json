@@ -11,6 +11,7 @@
   },
   "pray_list": {
     "add_new_pray": "Adicionar nova oração",
+    "delete_pray": "Deletar lembrete de oração?",
     "edit_pray": "Editar oração",
     "mark_as_answered": "Marcar como respondida",
     "answered_at": "Respondida em ",

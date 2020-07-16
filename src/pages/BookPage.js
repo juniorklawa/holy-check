@@ -84,7 +84,7 @@ const BookPage = ({route}) => {
 
     body: {
       marginHorizontal: 12,
-      marginTop: 24,
+      marginTop: 48,
     },
     progressText: {
       fontSize: 16,

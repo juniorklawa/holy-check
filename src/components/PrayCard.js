@@ -13,21 +13,25 @@ const PrayCard = ({pray, prayList, setPrayList, handleOpen, setEditing}) => {
   }
 
   async function showDeleteAlert(selectedPray) {
-    return Alert.alert('Delete pray note', 'Are you sure?', [
-      {
-        text: 'No',
-        onPress: () => {
-          return;
+    return Alert.alert(
+      translate('pray_list.delete_pray'),
+      translate('actions.are_you_sure'),
+      [
+        {
+          text: translate('actions.no'),
+          onPress: () => {
+            return;
+          },
+          style: 'cancel',
         },
-        style: 'cancel',
-      },
-      {
-        text: 'Yes',
-        onPress: async () => {
-          await deletePray(selectedPray);
+        {
+          text: translate('actions.yes'),
+          onPress: async () => {
+            await deletePray(selectedPray);
+          },
         },
-      },
-    ]);
+      ],
+    );
   }
 
   return (

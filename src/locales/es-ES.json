@@ -12,6 +12,7 @@
   "pray_list": {
     "add_new_pray": "Agregar nueva oración",
     "edit_pray": "Editar oración",
+    "delete_pray": "¿Eliminar oración?",
     "mark_as_answered": "Marcar como respondido",
     "answered_at": "Respondido en ",
     "reason": "Razón",
