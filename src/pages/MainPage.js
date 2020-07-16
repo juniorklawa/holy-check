@@ -114,7 +114,7 @@ const MainPage = () => {
     )}% ${translate('main_page.read')}`;
   }, [bookProgressList]);
 
-  async function resetProgress() {
+  const resetProgress = async () => {
     return Alert.alert(
       translate('main_page.reset_reading_progress'),
       translate('actions.are_you_sure'),
@@ -132,7 +132,7 @@ const MainPage = () => {
         },
       ],
     );
-  }
+  };
 
   return (
     <SafeAreaView>

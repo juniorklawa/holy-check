@@ -41,4 +41,4 @@ const ProgressBook = ({readChapters, totalBookChapters, bookType}) => {
   );
 };
 
-export default ProgressBook;
+export default React.memo(ProgressBook);

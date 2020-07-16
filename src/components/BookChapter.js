@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useCallback} from 'react';
 import {
   StyleSheet,
   Text,
@@ -11,7 +11,7 @@ import createOneBookProgress from '../services/createOneBookProgress';
 import createOneChapter from '../services/createOneChapter';
 import getBookTypeColors from '../utils/getBookTypeColors';
 
-export default function BookChapter({
+const BookChapter = ({
   chapter,
   type,
   parentId,
@@ -19,10 +19,10 @@ export default function BookChapter({
   setTotalReadChapters,
   totalReadChapters,
   section,
-}) {
+}) => {
   const [isRead, setIsRead] = useState(read);
 
-  async function handleChapter() {
+  const handleChapter = useCallback(async () => {
     setIsRead(prevState => !prevState);
     const newChapter = {
       id: parentId + chapter,
@@ -41,7 +41,14 @@ export default function BookChapter({
 
     await createOneChapter(newChapter);
     await createOneBookProgress(bookProgress);
-  }
+  }, [
+    chapter,
+    isRead,
+    parentId,
+    section,
+    setTotalReadChapters,
+    totalReadChapters,
+  ]);
 
   const styles = StyleSheet.create({
     cardContainer: {
@@ -101,4 +108,6 @@ export default function BookChapter({
       </View>
     </TouchableOpacity>
   );
-}
+};
+
+export default React.memo(BookChapter);

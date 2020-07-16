@@ -77,17 +77,4 @@ const SkeletonLoader = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  cardTitle: {
-    fontSize: 16,
-    color: '#424242',
-    fontFamily: 'Poppins-SemiBold',
-  },
-  cardSubtitle: {
-    fontSize: 12,
-    color: '#616161',
-    fontFamily: 'Poppins-Regular',
-  },
-});
-
-export default SkeletonLoader;
+export default React.memo(SkeletonLoader);

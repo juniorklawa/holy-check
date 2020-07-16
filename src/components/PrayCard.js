@@ -8,8 +8,8 @@ import {translate} from '../locales';
 const PrayCard = ({pray, prayList, setPrayList, handleOpen, setEditing}) => {
   async function deletePray(selectedPray) {
     const updatedList = prayList.filter(p => p.id !== selectedPray.id);
-    await deleteOnePray(selectedPray);
     setPrayList(updatedList);
+    await deleteOnePray(selectedPray);
   }
 
   async function showDeleteAlert(selectedPray) {

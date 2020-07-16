@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useCallback} from 'react';
 import {
   StyleSheet,
   Text,
@@ -21,7 +21,7 @@ const BookCard = ({book, readChapters}) => {
   const navigation = useNavigation();
   const {bookProgressList, updateBookProgress} = useProgress();
 
-  async function showCheckAsCompletedAlert() {
+  const showCheckAsCompletedAlert = useCallback(async () => {
     return Alert.alert(
       `${translate('words.check')} ${book.title} ${translate('words.as_read')}`,
       `${translate('actions.are_you_sure')}`,
@@ -91,8 +91,15 @@ const BookCard = ({book, readChapters}) => {
         },
       ],
     );
-  }
-
+  }, [
+    book.id,
+    book.section,
+    book.title,
+    book.totalChapters,
+    bookProgressList,
+    totalChapters,
+    updateBookProgress,
+  ]);
   return (
     <TouchableOpacity
       onPress={() => navigation.navigate('BookPage', {book})}
@@ -166,4 +173,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BookCard;
+export default React.memo(BookCard);

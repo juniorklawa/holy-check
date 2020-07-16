@@ -24,10 +24,6 @@ export const ProgressProvider = ({children}) => {
     loadData();
   }, []);
 
-  /**
-   * @TODO delete all prays
-   */
-
   const deleteReadChapters = useCallback(async () => {
     await deleteAllReadChapters();
     setBookProgress([]);
