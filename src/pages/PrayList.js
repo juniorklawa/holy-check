@@ -127,7 +127,7 @@ export default function PrayList() {
         {prayList.length ? (
           <Animated.FlatList
             style={styles.body}
-            contentContainerStyle={{ paddingTop: Platform.OS === 'android' ? 100 : 48 }}
+            contentContainerStyle={{ paddingTop: Platform.OS === 'android' ? 100 : 40 }}
             scrollIndicatorInsets={{ top: scrollIndicatorInsetTop }}
             showsVerticalScrollIndicator={false}
             onScroll={onScroll}
@@ -194,6 +194,7 @@ export default function PrayList() {
             </View>
             <TextInput
               placeholder={translate('pray_list.reason')}
+              multiline
               style={styles.prayTitle}
               onChangeText={text => setReason(text)}
               value={reason}
@@ -288,8 +289,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontFamily: 'Poppins-Medium',
     borderColor: '#BDBDBD',
-
-    color: '#424242',
+    color: '#616161',
     borderWidth: 1,
     borderRadius: 5,
     marginBottom: 8,
