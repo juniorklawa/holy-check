@@ -7,6 +7,7 @@ import {
   StatusBar,
   StyleSheet,
   View,
+  Platform,
 } from 'react-native';
 import {useCollapsibleStack} from 'react-navigation-collapsible';
 import BookChapter from '../components/BookChapter';
@@ -109,7 +110,7 @@ const BookPage = ({route}) => {
           contentInsetAdjustmentBehavior="automatic"
           showsVerticalScrollIndicator={false}
           onScroll={onScroll}
-          contentContainerStyle={{paddingTop: containerPaddingTop}}
+          contentContainerStyle={{paddingTop: Platform.OS === 'android' ? 80 : 10}}
           scrollIndicatorInsets={{top: scrollIndicatorInsetTop}}
           style={styles.scrollView}>
           <View style={styles.body}>

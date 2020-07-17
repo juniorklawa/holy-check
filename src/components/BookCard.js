@@ -1,4 +1,4 @@
-import React, {useCallback} from 'react';
+import React, { useCallback } from 'react';
 import {
   StyleSheet,
   Text,
@@ -6,20 +6,21 @@ import {
   View,
   Alert,
   Vibration,
+  Platform,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import getBookTypeColors from '../utils/getBookTypeColors';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {useNavigation} from '@react-navigation/native';
-import {useProgress} from '../hooks/progressProvider';
+import { useNavigation } from '@react-navigation/native';
+import { useProgress } from '../hooks/progressProvider';
 import createOneBookProgress from '../services/createOneBookProgress';
 import createOneChapter from '../services/createOneChapter';
-import {translate} from '../locales';
+import { translate } from '../locales';
 
-const BookCard = ({book, readChapters}) => {
-  const {type, title, totalChapters} = book;
+const BookCard = ({ book, readChapters }) => {
+  const { type, title, totalChapters } = book;
   const navigation = useNavigation();
-  const {bookProgressList, updateBookProgress} = useProgress();
+  const { bookProgressList, updateBookProgress } = useProgress();
 
   const showCheckAsCompletedAlert = useCallback(async () => {
     return Alert.alert(
@@ -102,25 +103,27 @@ const BookCard = ({book, readChapters}) => {
   ]);
   return (
     <TouchableOpacity
-      onPress={() => navigation.navigate('BookPage', {book})}
+      onPress={() => navigation.navigate('BookPage', { book })}
       onLongPress={async () => {
-        Vibration.vibrate(50);
+
+        if (Platform.OS === 'android') { Vibration.vibrate(30); }
+
         await showCheckAsCompletedAlert();
       }}
-      style={{flex: 1}}>
+      style={{ flex: 1 }}>
       <LinearGradient
-        start={{x: 1, y: 0}}
-        end={{x: 0, y: 3}}
+        start={{ x: 1, y: 0 }}
+        end={{ x: 0, y: 3 }}
         colors={getBookTypeColors(type)}
         style={styles.cardContainer}>
         {readChapters === book.totalChapters ? (
-          <View style={{alignItems: 'flex-end', flex: 1, margin: 4}}>
+          <View style={{ alignItems: 'flex-end', flex: 1, margin: 4 }}>
             <Icon name="check" size={16} color="#fff" />
           </View>
         ) : (
-          <View style={{alignItems: 'flex-end', flex: 1}} />
-        )}
-        <View style={{justifyContent: 'flex-end'}}>
+            <View style={{ alignItems: 'flex-end', flex: 1 }} />
+          )}
+        <View style={{ justifyContent: 'flex-end' }}>
           <Text adjustsFontSizeToFit numberOfLines={1} style={styles.title}>
             {title}
           </Text>
@@ -132,13 +135,13 @@ const BookCard = ({book, readChapters}) => {
               {readChapters} / {totalChapters} chapters
             </Text>
           ) : (
-            <Text
-              adjustsFontSizeToFit
-              numberOfLines={1}
-              style={styles.totalChapters}>
-              {totalChapters} chapters
-            </Text>
-          )}
+              <Text
+                adjustsFontSizeToFit
+                numberOfLines={1}
+                style={styles.totalChapters}>
+                {totalChapters} chapters
+              </Text>
+            )}
         </View>
       </LinearGradient>
     </TouchableOpacity>
