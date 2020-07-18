@@ -1,5 +1,5 @@
-import {useNavigation} from '@react-navigation/native';
-import React, {useCallback, useEffect, useMemo, useRef} from 'react';
+import { useNavigation } from '@react-navigation/native';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import {
   Alert,
   Animated,
@@ -9,16 +9,17 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Platform,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import {useCollapsibleStack} from 'react-navigation-collapsible';
+import { useCollapsibleStack } from 'react-navigation-collapsible';
 import BookCard from '../components/BookCard';
 import SkeletonLoader from '../components/SkeletonLoader';
-import {NEW_TESTMENT_DATA, OLD_TESTMENT_DATA} from '../data/BOOKS_DATA';
-import {TestmentEnum} from '../enums/TestmentEnum';
-import {useProgress} from '../hooks/progressProvider';
+import { NEW_TESTMENT_DATA, OLD_TESTMENT_DATA } from '../data/BOOKS_DATA';
+import { TestmentEnum } from '../enums/TestmentEnum';
+import { useProgress } from '../hooks/progressProvider';
 import getBookProgress from '../services/getBookProgress';
-import {translate} from '../locales/index';
+import { translate } from '../locales/index';
 
 const MainPage = () => {
   const navigation = useNavigation();
@@ -35,16 +36,16 @@ const MainPage = () => {
       headerRight: () => (
         <TouchableOpacity
           onPress={() => resetProgress()}
-          hitSlop={{top: 20, bottom: 20, left: 50, right: 50}}
-          style={{marginRight: 16}}>
+          hitSlop={{ top: 20, bottom: 20, left: 50, right: 50 }}
+          style={{ marginRight: 16 }}>
           <Icon name="redo" color={'#000'} size={20} />
         </TouchableOpacity>
       ),
       headerLeft: () => (
         <TouchableOpacity
-          hitSlop={{top: 20, bottom: 20, left: 50, right: 50}}
+          hitSlop={{ top: 20, bottom: 20, left: 50, right: 50 }}
           onPress={() => navigation.navigate('PrayList')}
-          style={{marginLeft: 16}}>
+          style={{ marginLeft: 16 }}>
           <Icon name="list" color={'#000'} size={20} />
         </TouchableOpacity>
       ),
@@ -69,7 +70,7 @@ const MainPage = () => {
 
     return unsubscribe;
   }, [navigation, fadeAnim, updateBookProgress]);
-  const {onScroll, scrollIndicatorInsetTop} = useCollapsibleStack();
+  const { onScroll, scrollIndicatorInsetTop } = useCollapsibleStack();
 
   const getReadChapters = useCallback(
     id => {
@@ -140,8 +141,8 @@ const MainPage = () => {
         contentInsetAdjustmentBehavior="automatic"
         showsVerticalScrollIndicator={false}
         onScroll={onScroll}
-        contentContainerStyle={{paddingTop: 80}}
-        scrollIndicatorInsets={{top: scrollIndicatorInsetTop}}
+        contentContainerStyle={{paddingTop: Platform.OS === 'android' ? 80 : 70}}
+        scrollIndicatorInsets={{ top: scrollIndicatorInsetTop }}
         style={styles.scrollView}>
         <Animated.View
           style={[
@@ -155,7 +156,7 @@ const MainPage = () => {
               <FlatList
                 showsVerticalScrollIndicator={false}
                 ListHeaderComponent={
-                  <View style={{marginLeft: 4}}>
+                  <View style={{ marginLeft: 4, marginTop: Platform.OS === 'ios' ? -24 : 0 }}>
                     <Text style={styles.sectionTitle}>
                       {translate('main_page.old_testment')}
                     </Text>
@@ -165,7 +166,7 @@ const MainPage = () => {
                   </View>
                 }
                 data={OLD_TESTMENT_DATA}
-                renderItem={({item}) => (
+                renderItem={({ item }) => (
                   <BookCard
                     readChapters={getReadChapters(item.id)}
                     book={item}
@@ -176,7 +177,7 @@ const MainPage = () => {
               />
               <FlatList
                 ListHeaderComponent={
-                  <View style={{marginLeft: 4}}>
+                  <View style={{ marginLeft: 4 }}>
                     <Text style={styles.sectionTitle}>
                       {translate('main_page.new_testment')}
                     </Text>
@@ -186,7 +187,7 @@ const MainPage = () => {
                   </View>
                 }
                 data={NEW_TESTMENT_DATA}
-                renderItem={({item}) => (
+                renderItem={({ item }) => (
                   <BookCard
                     readChapters={getReadChapters(item.id)}
                     book={item}
@@ -197,8 +198,8 @@ const MainPage = () => {
               />
             </>
           ) : (
-            <SkeletonLoader />
-          )}
+              <SkeletonLoader />
+            )}
         </Animated.View>
       </Animated.ScrollView>
     </SafeAreaView>

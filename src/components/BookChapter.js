@@ -1,10 +1,11 @@
-import React, {useState, useCallback} from 'react';
+import React, {useState} from 'react';
 import {
   StyleSheet,
   Text,
   TouchableOpacity,
   Vibration,
   View,
+  Platform,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import createOneBookProgress from '../services/createOneBookProgress';
@@ -45,13 +46,12 @@ const BookChapter = ({
 
   const styles = StyleSheet.create({
     cardContainer: {
-      margin: 6,
-      borderRadius: 5,
-      height: 100,
-      width: 100,
       justifyContent: 'center',
       alignItems: 'center',
-      padding: 8,
+      margin: 6,
+      borderRadius: 10,
+      height: 100,
+      width: 100,
       opacity: isRead ? 1 : 0.3,
     },
     title: {
@@ -59,20 +59,10 @@ const BookChapter = ({
       color: '#fff',
       fontSize: 24,
     },
-    readChapters: {
-      fontFamily: 'Poppins-Light',
-      color: '#fefefe',
-      fontSize: 10,
-    },
-    totalChapters: {
-      fontFamily: 'Poppins-Thin',
-      color: '#fff',
-      fontSize: 10,
-    },
     overlay: {
       backgroundColor: '#616161',
       margin: 6,
-      borderRadius: 5,
+      borderRadius: 10,
       height: 100,
       width: 100,
       justifyContent: 'center',
@@ -87,7 +77,7 @@ const BookChapter = ({
         Vibration.vibrate(20);
         await handleChapter();
       }}
-      style={{flex: 1}}>
+      style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
       <View style={styles.overlay}>
         <LinearGradient
           start={{x: 1, y: 0}}
@@ -102,5 +92,3 @@ const BookChapter = ({
     </TouchableOpacity>
   );
 };
-
-export default React.memo(BookChapter);
