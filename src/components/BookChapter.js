@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   StyleSheet,
   Text,
@@ -12,7 +12,7 @@ import createOneBookProgress from '../services/createOneBookProgress';
 import createOneChapter from '../services/createOneChapter';
 import getBookTypeColors from '../utils/getBookTypeColors';
 
-const BookChapter = ({
+export default function BookChapter({
   chapter,
   type,
   parentId,
@@ -20,10 +20,10 @@ const BookChapter = ({
   setTotalReadChapters,
   totalReadChapters,
   section,
-}) => {
+}) {
   const [isRead, setIsRead] = useState(read);
 
-  const handleChapter = async () => {
+  async function handleChapter() {
     setIsRead(prevState => !prevState);
     const newChapter = {
       id: parentId + chapter,
@@ -42,34 +42,38 @@ const BookChapter = ({
 
     await createOneChapter(newChapter);
     await createOneBookProgress(bookProgress);
-  };
+  }
+
 
   const styles = StyleSheet.create({
-    cardContainer: {
-      justifyContent: 'center',
-      alignItems: 'center',
-      margin: 6,
-      borderRadius: 10,
-      height: 100,
-      width: 100,
-      opacity: isRead ? 1 : 0.3,
-    },
-    title: {
-      fontFamily: 'Poppins-SemiBold',
-      color: '#fff',
-      fontSize: 24,
-    },
-    overlay: {
-      backgroundColor: '#616161',
-      margin: 6,
-      borderRadius: 10,
-      height: 100,
-      width: 100,
-      justifyContent: 'center',
-      alignItems: 'center',
-      padding: 8,
-    },
-  });
+  cardContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: 6,
+    borderRadius: 10,
+    height: 100,
+    width: 100,
+    opacity: isRead ? 1 : 0.3,
+  },
+  title: {
+    fontFamily: 'Poppins-SemiBold',
+    color: '#fff',
+    fontSize: 24,
+  },
+  overlay: {
+    backgroundColor: '#616161',
+    margin: 6,
+    borderRadius: 10,
+    height: 100,
+    width: 100,
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: 8,
+  },
+
+});
+
+
 
   return (
     <TouchableOpacity
@@ -77,11 +81,11 @@ const BookChapter = ({
         Vibration.vibrate(20);
         await handleChapter();
       }}
-      style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+      style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <View style={styles.overlay}>
         <LinearGradient
-          start={{x: 1, y: 0}}
-          end={{x: 0, y: 3}}
+          start={{ x: 1, y: 0 }}
+          end={{ x: 0, y: 3 }}
           colors={getBookTypeColors(type)}
           style={styles.cardContainer}>
           <Text adjustsFontSizeToFit numberOfLines={1} style={styles.title}>
@@ -89,6 +93,6 @@ const BookChapter = ({
           </Text>
         </LinearGradient>
       </View>
-    </TouchableOpacity>
+    </TouchableOpacity >
   );
 };
