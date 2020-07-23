@@ -1,10 +1,11 @@
 import 'react-native-gesture-handler';
-import * as React from 'react';
+import React, {useEffect} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {StatusBar} from 'react-native';
 import AppRoutes from './routes/AppRoutes';
 import {YellowBox} from 'react-native';
 import AppProvider from './hooks';
+import SplashScreen from 'react-native-splash-screen';
 
 YellowBox.ignoreWarnings([
   'VirtualizedLists should never be nested',
@@ -12,6 +13,10 @@ YellowBox.ignoreWarnings([
 ]);
 
 const App = () => {
+  useEffect(() => {
+    SplashScreen.hide();
+  }, []);
+
   return (
     <>
       <NavigationContainer>
