@@ -44,41 +44,39 @@ export default function BookChapter({
     await createOneBookProgress(bookProgress);
   }
 
-
   const styles = StyleSheet.create({
-  cardContainer: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    margin: 6,
-    borderRadius: 10,
-    height: 100,
-    width: 100,
-    opacity: isRead ? 1 : 0.3,
-  },
-  title: {
-    fontFamily: 'Poppins-SemiBold',
-    color: '#fff',
-    fontSize: 24,
-  },
-  overlay: {
-    backgroundColor: '#616161',
-    margin: 6,
-    borderRadius: 10,
-    height: 100,
-    width: 100,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 8,
-  },
-
-});
-
-
+    cardContainer: {
+      justifyContent: 'center',
+      alignItems: 'center',
+      margin: 6,
+      borderRadius: 10,
+      height: 100,
+      width: 100,
+      opacity: isRead ? 1 : 0.3,
+    },
+    title: {
+      fontFamily: 'Poppins-SemiBold',
+      color: '#fff',
+      fontSize: 24,
+    },
+    overlay: {
+      backgroundColor: '#616161',
+      margin: 6,
+      borderRadius: 10,
+      height: 100,
+      width: 100,
+      justifyContent: 'center',
+      alignItems: 'center',
+      padding: 8,
+    },
+  });
 
   return (
     <TouchableOpacity
       onPress={async () => {
-        Vibration.vibrate(20);
+        if (Platform.OS === 'android') {
+          Vibration.vibrate(20);
+        }
         await handleChapter();
       }}
       style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -93,6 +91,6 @@ export default function BookChapter({
           </Text>
         </LinearGradient>
       </View>
-    </TouchableOpacity >
+    </TouchableOpacity>
   );
-};
+}

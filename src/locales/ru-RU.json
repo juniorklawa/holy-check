@@ -7,7 +7,8 @@
       "old_testment": "Ветхий Завет",
       "new_testment": "Новый Завет",
       "read": "читать",
-      "reset_reading_progress": "Сбросить ваш прогресс чтения!"
+      "reset_reading_progress": "Сбросить ваш прогресс чтения!",
+      "chapters": "главы"
     },
     "pray_list": {
       "add_new_pray": "Добавить новую молитву",

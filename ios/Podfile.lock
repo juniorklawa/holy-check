@@ -243,6 +243,8 @@ PODS:
   - react-native-shimmer (0.6.0):
     - React (>= 0.45.1)
     - Shimmer (~> 1)
+  - react-native-splash-screen (3.2.0):
+    - React
   - react-native-uuid-generator (6.1.1):
     - React
   - React-RCTActionSheet (0.62.2):
@@ -304,7 +306,7 @@ PODS:
     - React-cxxreact (= 0.62.2)
     - React-jsi (= 0.62.2)
     - ReactCommon/callinvoker (= 0.62.2)
-  - RealmJS (6.0.2):
+  - RealmJS (5.0.5):
     - GCDWebServer
     - React
   - RNCCheckbox (0.4.2):
@@ -363,6 +365,7 @@ DEPENDENCIES:
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-shimmer (from `../node_modules/react-native-shimmer`)
+  - react-native-splash-screen (from `../node_modules/react-native-splash-screen`)
   - react-native-uuid-generator (from `../node_modules/react-native-uuid-generator`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
   - React-RCTAnimation (from `../node_modules/react-native/Libraries/NativeAnimation`)
@@ -436,6 +439,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-safe-area-context"
   react-native-shimmer:
     :path: "../node_modules/react-native-shimmer"
+  react-native-splash-screen:
+    :path: "../node_modules/react-native-splash-screen"
   react-native-uuid-generator:
     :path: "../node_modules/react-native-uuid-generator"
   React-RCTActionSheet:
@@ -505,6 +510,7 @@ SPEC CHECKSUMS:
   React-jsinspector: 512e560d0e985d0e8c479a54a4e5c147a9c83493
   react-native-safe-area-context: e22a8ca00f758273d2408953965cb8db67da7925
   react-native-shimmer: 2fdba9953215a29106febc9d147caa31a0080a8a
+  react-native-splash-screen: 200d11d188e2e78cea3ad319964f6142b6384865
   react-native-uuid-generator: 82ffa2a1cac94242ebed52c4dedc5044d3412717
   React-RCTActionSheet: f41ea8a811aac770e0cc6e0ad6b270c644ea8b7c
   React-RCTAnimation: 49ab98b1c1ff4445148b72a3d61554138565bad0
@@ -516,7 +522,7 @@ SPEC CHECKSUMS:
   React-RCTText: fae545b10cfdb3d247c36c56f61a94cfd6dba41d
   React-RCTVibration: 4356114dbcba4ce66991096e51a66e61eda51256
   ReactCommon: ed4e11d27609d571e7eee8b65548efc191116eb3
-  RealmJS: fa482f7607e70a17abfc5e7817cfca1042186b62
+  RealmJS: 16eb794ce5490cf2981372167ac6a6c45f989a4e
   RNCCheckbox: 357578d3b42652c78ee9a1bb9bcfc3195af6e161
   RNCMaskedView: 5a8ec07677aa885546a0d98da336457e2bea557f
   RNGestureHandler: 8f09cd560f8d533eb36da5a6c5a843af9f056b38

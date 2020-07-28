@@ -7,7 +7,8 @@
     "old_testment": "Viejo Testamento",
     "new_testment": "Nuevo Testamento",
     "read": "leído",
-    "reset_reading_progress": "¡Restablece tu progreso de lectura!"
+    "reset_reading_progress": "¡Restablece tu progreso de lectura!",
+    "chapters": "capítulos"
   },
   "pray_list": {
     "add_new_pray": "Agregar nueva oración",

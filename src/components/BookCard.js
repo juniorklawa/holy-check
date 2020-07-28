@@ -105,8 +105,9 @@ const BookCard = ({ book, readChapters }) => {
     <TouchableOpacity
       onPress={() => navigation.navigate('BookPage', { book })}
       onLongPress={async () => {
-
-        if (Platform.OS === 'android') { Vibration.vibrate(30); }
+        if (Platform.OS === 'android') {
+          Vibration.vibrate(30);
+        }
 
         await showCheckAsCompletedAlert();
       }}
@@ -121,8 +122,8 @@ const BookCard = ({ book, readChapters }) => {
             <Icon name="check" size={16} color="#fff" />
           </View>
         ) : (
-            <View style={{ alignItems: 'flex-end', flex: 1 }} />
-          )}
+          <View style={{ alignItems: 'flex-end', flex: 1 }} />
+        )}
         <View style={{ justifyContent: 'flex-end' }}>
           <Text adjustsFontSizeToFit numberOfLines={1} style={styles.title}>
             {title}
@@ -132,16 +133,18 @@ const BookCard = ({ book, readChapters }) => {
               adjustsFontSizeToFit
               numberOfLines={1}
               style={styles.totalChapters}>
-              {readChapters} / {totalChapters} chapters
+              {`${readChapters / totalChapters} ${translate(
+                'main_page.chapters',
+              )}`}
             </Text>
           ) : (
-              <Text
-                adjustsFontSizeToFit
-                numberOfLines={1}
-                style={styles.totalChapters}>
-                {totalChapters} chapters
-              </Text>
-            )}
+            <Text
+              adjustsFontSizeToFit
+              numberOfLines={1}
+              style={styles.totalChapters}>
+              {`${totalChapters} ${translate('main_page.chapters')}`}
+            </Text>
+          )}
         </View>
       </LinearGradient>
     </TouchableOpacity>

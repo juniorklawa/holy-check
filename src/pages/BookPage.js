@@ -1,5 +1,5 @@
-import {useNavigation} from '@react-navigation/native';
-import React, {useEffect, useState, useCallback} from 'react';
+import { useNavigation } from '@react-navigation/native';
+import React, { useEffect, useState, useCallback } from 'react';
 import {
   Animated,
   FlatList,
@@ -9,15 +9,15 @@ import {
   View,
   Platform,
 } from 'react-native';
-import {useCollapsibleStack} from 'react-navigation-collapsible';
+import { useCollapsibleStack } from 'react-navigation-collapsible';
 import BookChapter from '../components/BookChapter';
 import ProgressBook from '../components/ProgressBook';
 import getChapters from '../services/getChapters';
 import getBookTypeColors from '../utils/getBookTypeColors';
 
-const BookPage = ({route}) => {
+const BookPage = ({ route }) => {
   const navigation = useNavigation();
-  const {book} = route.params;
+  const { book } = route.params;
   const [chapters, setChapters] = useState([]);
   const [isLoading, setLoading] = useState(false);
   const [totalReadChapters, setTotalReadChapters] = useState(0);
@@ -81,7 +81,7 @@ const BookPage = ({route}) => {
   }, [book.id, book.section, book.totalChapters, chapters]);
 
   const styles = StyleSheet.create({
-    emptyItem: {width: 100, height: 100, padding: 8, margin: 12},
+    emptyItem: { width: 100, height: 100, padding: 8, margin: 12 },
 
     body: {
       marginHorizontal: 12,
@@ -110,14 +110,16 @@ const BookPage = ({route}) => {
           contentInsetAdjustmentBehavior="automatic"
           showsVerticalScrollIndicator={false}
           onScroll={onScroll}
-          contentContainerStyle={{paddingTop: Platform.OS === 'android' ? 80 : 10}}
-          scrollIndicatorInsets={{top: scrollIndicatorInsetTop}}
+          contentContainerStyle={{
+            paddingTop: Platform.OS === 'android' ? 80 : 10,
+          }}
+          scrollIndicatorInsets={{ top: scrollIndicatorInsetTop }}
           style={styles.scrollView}>
           <View style={styles.body}>
             {!isLoading ? (
               <FlatList
                 data={createChaptersRow()}
-                renderItem={({item}) => {
+                renderItem={({ item }) => {
                   if (item.empty) {
                     return <View style={styles.emptyItem} />;
                   }
