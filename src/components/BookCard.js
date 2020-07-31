@@ -133,8 +133,8 @@ const BookCard = ({ book, readChapters }) => {
               adjustsFontSizeToFit
               numberOfLines={1}
               style={styles.totalChapters}>
-              {`${readChapters / totalChapters} ${translate(
-                'main_page.chapters',
+              {`${readChapters} / ${totalChapters} ${translate(
+                'main_page.read',
               )}`}
             </Text>
           ) : (
