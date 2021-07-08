@@ -1,7 +1,10 @@
-import {createStackNavigator, TransitionPresets} from '@react-navigation/stack';
+import {
+  createStackNavigator,
+  TransitionPresets,
+} from '@react-navigation/stack';
 import React from 'react';
-import {createCollapsibleStack} from 'react-navigation-collapsible';
-import {translate} from '../locales';
+import { createCollapsibleStack } from 'react-navigation-collapsible';
+import { translate } from '../locales';
 import BookPage from '../pages/BookPage';
 import MainPage from '../pages/MainPage';
 import PrayList from '../pages/PrayList';
@@ -12,7 +15,7 @@ const AppRoutes = () => (
   <App.Navigator
     screenOptions={{
       ...TransitionPresets.SlideFromRightIOS,
-      cardStyle: {backgroundColor: '#FFF'},
+      cardStyle: { backgroundColor: '#FFF' },
       headerTintColor: '#000',
     }}>
     {createCollapsibleStack(

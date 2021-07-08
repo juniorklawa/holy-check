@@ -1,9 +1,9 @@
 import 'react-native-gesture-handler';
-import React, {useEffect} from 'react';
-import {NavigationContainer} from '@react-navigation/native';
-import {StatusBar} from 'react-native';
+import React, { useEffect } from 'react';
+import { NavigationContainer } from '@react-navigation/native';
+import { StatusBar } from 'react-native';
 import AppRoutes from './routes/AppRoutes';
-import {YellowBox} from 'react-native';
+import { YellowBox } from 'react-native';
 import AppProvider from './hooks';
 import SplashScreen from 'react-native-splash-screen';
 

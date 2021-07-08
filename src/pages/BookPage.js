@@ -33,11 +33,7 @@ const BookPage = ({ route }) => {
     loadData();
   }, [book]);
 
-  const {
-    onScroll,
-    scrollIndicatorInsetTop,
-    containerPaddingTop,
-  } = useCollapsibleStack();
+  const { onScroll, scrollIndicatorInsetTop } = useCollapsibleStack();
 
   React.useLayoutEffect(() => {
     navigation.setOptions({

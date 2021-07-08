@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, View, FlatList} from 'react-native';
+import { FlatList, View } from 'react-native';
 import Shimmer from 'react-native-shimmer';
 
 const SkeletonLoader = () => {
@@ -24,9 +24,9 @@ const SkeletonLoader = () => {
   ];
 
   return (
-    <View style={{marginTop: 16}}>
+    <View style={{ marginTop: 16 }}>
       <Shimmer
-        style={{marginTop: 8, width: 220, marginLeft: 6}}
+        style={{ marginTop: 8, width: 220, marginLeft: 6 }}
         animationOpacity={0.8}
         opacity={0.5}>
         <View
@@ -38,7 +38,7 @@ const SkeletonLoader = () => {
         />
       </Shimmer>
       <Shimmer
-        style={{marginTop: 8, width: 200, marginLeft: 6}}
+        style={{ marginTop: 8, width: 200, marginLeft: 6 }}
         animationOpacity={0.8}
         opacity={0.5}>
         <View
@@ -51,7 +51,7 @@ const SkeletonLoader = () => {
 
       <FlatList
         data={data}
-        style={{marginTop: 16}}
+        style={{ marginTop: 16 }}
         renderItem={() => (
           <Shimmer
             style={{

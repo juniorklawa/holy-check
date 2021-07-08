@@ -10,7 +10,7 @@ import deleteAllReadChapters from '../services/deleteAllReadChapters';
 
 const ProgressContext = createContext({});
 
-export const ProgressProvider = ({children}) => {
+export const ProgressProvider = ({ children }) => {
   const [bookProgressList, setBookProgress] = useState([]);
   const [loading, setLoading] = useState(true);
 

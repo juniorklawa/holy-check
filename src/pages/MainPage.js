@@ -141,7 +141,9 @@ const MainPage = () => {
         contentInsetAdjustmentBehavior="automatic"
         showsVerticalScrollIndicator={false}
         onScroll={onScroll}
-        contentContainerStyle={{paddingTop: Platform.OS === 'android' ? 80 : 70}}
+        contentContainerStyle={{
+          paddingTop: Platform.OS === 'android' ? 80 : 70,
+        }}
         scrollIndicatorInsets={{ top: scrollIndicatorInsetTop }}
         style={styles.scrollView}>
         <Animated.View
@@ -156,7 +158,11 @@ const MainPage = () => {
               <FlatList
                 showsVerticalScrollIndicator={false}
                 ListHeaderComponent={
-                  <View style={{ marginLeft: 4, marginTop: Platform.OS === 'ios' ? -24 : 0 }}>
+                  <View
+                    style={{
+                      marginLeft: 4,
+                      marginTop: Platform.OS === 'ios' ? -24 : 0,
+                    }}>
                     <Text style={styles.sectionTitle}>
                       {translate('main_page.old_testment')}
                     </Text>
@@ -198,8 +204,8 @@ const MainPage = () => {
               />
             </>
           ) : (
-              <SkeletonLoader />
-            )}
+            <SkeletonLoader />
+          )}
         </Animated.View>
       </Animated.ScrollView>
     </SafeAreaView>

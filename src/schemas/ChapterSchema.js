@@ -3,7 +3,7 @@ export default class ChapterSchema {
     name: 'Chapter',
     primaryKey: 'id',
     properties: {
-      id: {type: 'string'},
+      id: { type: 'string' },
       read: 'bool',
       note: 'string',
       section: 'string',

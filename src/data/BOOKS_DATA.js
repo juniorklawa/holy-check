@@ -1,6 +1,6 @@
-import {BookType} from '../enums/BookType';
-import {TestmentEnum} from '../enums/TestmentEnum';
-import {translate} from '../locales';
+import { BookType } from '../enums/BookType';
+import { TestmentEnum } from '../enums/TestmentEnum';
+import { translate } from '../locales';
 
 export const OLD_TESTMENT_DATA = [
   {

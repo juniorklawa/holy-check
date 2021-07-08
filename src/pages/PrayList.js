@@ -127,7 +127,9 @@ export default function PrayList() {
         {prayList.length ? (
           <Animated.FlatList
             style={styles.body}
-            contentContainerStyle={{ paddingTop: Platform.OS === 'android' ? 100 : 40 }}
+            contentContainerStyle={{
+              paddingTop: Platform.OS === 'android' ? 100 : 40,
+            }}
             scrollIndicatorInsets={{ top: scrollIndicatorInsetTop }}
             showsVerticalScrollIndicator={false}
             onScroll={onScroll}
@@ -144,12 +146,12 @@ export default function PrayList() {
             )}
           />
         ) : (
-            <View style={styles.emptyContainer}>
-              <Text style={{ fontFamily: 'Poppins-Light' }}>
-                {translate('pray_list.empty_list')}
-              </Text>
-            </View>
-          )}
+          <View style={styles.emptyContainer}>
+            <Text style={{ fontFamily: 'Poppins-Light' }}>
+              {translate('pray_list.empty_list')}
+            </Text>
+          </View>
+        )}
 
         <RBSheet
           ref={refRBSheet}

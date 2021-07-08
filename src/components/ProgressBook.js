@@ -1,11 +1,11 @@
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import getBookTypeColors from '../utils/getBookTypeColors';
-import {translate} from '../locales';
+import { translate } from '../locales';
 
-const ProgressBook = ({readChapters, totalBookChapters, bookType}) => {
+const ProgressBook = ({ readChapters, totalBookChapters, bookType }) => {
   const styles = StyleSheet.create({
-    emptyItem: {width: 100, height: 100, padding: 8, margin: 12},
+    emptyItem: { width: 100, height: 100, padding: 8, margin: 12 },
 
     body: {
       marginHorizontal: 12,
@@ -32,7 +32,7 @@ const ProgressBook = ({readChapters, totalBookChapters, bookType}) => {
   });
 
   return (
-    <View style={{flexDirection: 'row', marginRight: 32}}>
+    <View style={{ flexDirection: 'row', marginRight: 32 }}>
       <Text style={styles.progressText}>{`${readChapters}`}</Text>
       <Text style={styles.totalText}>{`/${totalBookChapters} ${translate(
         'words.read',

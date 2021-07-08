@@ -1,7 +1,7 @@
 import React from 'react';
-import {ProgressProvider} from './progressProvider';
+import { ProgressProvider } from './progressProvider';
 
-const AppProvider = ({children}) => (
+const AppProvider = ({ children }) => (
   <ProgressProvider>{children}</ProgressProvider>
 );
 
